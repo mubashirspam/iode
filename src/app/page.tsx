@@ -19,6 +19,10 @@ import {
 } from "lucide-react";
 import { StatCounter } from "@/components/StatCounter";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import HomeUniversities from "@/components/HomeUniversities";
+import UniversityMarquee from "@/components/UniversityMarquee";
+import SectionHeading from "@/components/SectionHeading";
+import { getHomeUniversities, getUniversityLogos } from "@/lib/db/queries";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -26,6 +30,10 @@ export const metadata: Metadata = {
   description:
     "Vidyavasal helps 5,000+ students get admitted to top universities across India. Expert guidance for distance education, +1, +2, UG, PG, MBA admissions and courses.",
 };
+
+// Revalidate hourly so newly added universities and admission-status changes
+// from the tracker show up without a redeploy.
+export const revalidate = 3600;
 
 const testimonials = [
   {
@@ -66,73 +74,6 @@ const testimonials = [
     gradFrom: "#10B981",
     gradTo: "#059669",
     location: "Kozhikode, Kerala",
-  },
-];
-
-const universities = [
-  {
-    name: "Manipal University",
-    abbr: "MU",
-    type: "Deemed University",
-    courses: 12,
-    color: "from-[#4F46E5] to-[#7C3AED]",
-    slug: "manipal-university",
-  },
-  {
-    name: "IGNOU",
-    abbr: "IG",
-    type: "Central University",
-    courses: 18,
-    color: "from-[#0EA5E9] to-[#06B6D4]",
-    slug: "ignou",
-  },
-  {
-    name: "Symbiosis",
-    abbr: "SU",
-    type: "Deemed University",
-    courses: 8,
-    color: "from-[#F59E0B] to-[#D97706]",
-    slug: "symbiosis",
-  },
-  {
-    name: "Annamalai",
-    abbr: "AU",
-    type: "State University",
-    courses: 14,
-    color: "from-[#10B981] to-[#059669]",
-    slug: "annamalai-university",
-  },
-  {
-    name: "Bharathiar",
-    abbr: "BU",
-    type: "State University",
-    courses: 11,
-    color: "from-[#06B6D4] to-[#0EA5E9]",
-    slug: "bharathiar-university",
-  },
-  {
-    name: "Osmania",
-    abbr: "OU",
-    type: "State University",
-    courses: 9,
-    color: "from-[#F43F5E] to-[#E11D48]",
-    slug: "osmania-university",
-  },
-  {
-    name: "GLA University",
-    abbr: "GL",
-    type: "Deemed University",
-    courses: 10,
-    color: "from-[#8B5CF6] to-[#7C3AED]",
-    slug: "gla-university",
-  },
-  {
-    name: "Amrita",
-    abbr: "AM",
-    type: "Deemed University",
-    courses: 7,
-    color: "from-[#EC4899] to-[#DB2777]",
-    slug: "amrita-university",
   },
 ];
 
@@ -184,7 +125,12 @@ const features = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const [homeUniversities, marqueeUniversities] = await Promise.all([
+    getHomeUniversities(12),
+    getUniversityLogos(),
+  ]);
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* ══════════════════════ HERO ══════════════════════ */}
@@ -273,54 +219,43 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════ MARQUEE ══════════════════════ */}
-      <section className="py-4 bg-white border-y border-[#E5E5EA]">
-        <div className="marquee-container">
-          <div className="marquee-track">
-            {[...trustBadges, ...trustBadges].map((name, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-2.5 mx-8 shrink-0"
-              >
-                <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[#4F46E5] to-[#0EA5E9]" />
-                <span className="text-[#6E6E73] font-medium text-sm whitespace-nowrap">
-                  {name}
-                </span>
-              </div>
-            ))}
+      <section className="py-5 bg-white border-y border-[#E5E5EA]">
+        {marqueeUniversities.length > 0 ? (
+          <UniversityMarquee universities={marqueeUniversities} />
+        ) : (
+          <div className="marquee-container">
+            <div className="marquee-track">
+              {[...trustBadges, ...trustBadges].map((name, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-2.5 mx-8 shrink-0"
+                >
+                  <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[#4F46E5] to-[#0EA5E9]" />
+                  <span className="text-[#6E6E73] font-medium text-sm whitespace-nowrap">
+                    {name}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </section>
 
       {/* ══════════════════════ PROGRAMS (BENTO) ══════════════════════ */}
       <section className="py-20 md:py-28 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <ScrollReveal className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-4">
-            <div>
-              <span className="section-label-purple mb-4 inline-flex">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                  />
-                </svg>
-                Our Core Programs
-              </span>
-              <h2 className="text-3xl md:text-4xl font-bold text-[#1D1D1F] mt-3 leading-tight">
-                Three paths to your
-                <br />
-                <span className="gradient-text-vivid">dream career</span>
-              </h2>
-              <p className="text-[#6E6E73] max-w-lg text-base mt-3">
-                Choose the program designed for your goals, timeline, and budget.
-              </p>
-            </div>
+            <SectionHeading
+              align="left"
+              eyebrow="Our Core Programs"
+              title={
+                <>
+                  Three paths to your{" "}
+                  <span className="gradient-text-vivid">dream career</span>
+                </>
+              }
+              subtitle="Choose the program designed for your goals, timeline, and budget."
+            />
             <Link
               href="/courses"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full btn-gradient text-white font-semibold text-sm btn-press shrink-0 self-start md:self-auto"
@@ -531,6 +466,34 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ══════════════════════ UNIVERSITIES ══════════════════════ */}
+      <section className="py-20 md:py-28 section-mesh-bg">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <ScrollReveal className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-4">
+            <SectionHeading
+              align="left"
+              tone="blue"
+              eyebrow="Partner Universities"
+              title={
+                <>
+                  Top universities{" "}
+                  <span className="gradient-text-vivid">we work with</span>
+                </>
+              }
+              subtitle="All UGC-recognized — your degree is valid across India."
+            />
+            <Link
+              href="/universities"
+              className="inline-flex items-center gap-2 text-[#4F46E5] font-semibold text-sm hover:underline shrink-0"
+            >
+              View all universities →
+            </Link>
+          </ScrollReveal>
+
+          <HomeUniversities data={homeUniversities} />
+        </div>
+      </section>
+
       {/* ══════════════════════ STATS ══════════════════════ */}
       <section className="py-16 md:py-20 dark-vivid-bg relative overflow-hidden">
         <div className="absolute inset-0 dot-pattern opacity-10 pointer-events-none" />
@@ -548,13 +511,18 @@ export default function Home() {
         />
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="text-center mb-12">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white/80 text-sm font-semibold border border-white/10 mb-4">
-              <span className="w-2 h-2 rounded-full bg-[#34C759] animate-pulse-soft" />
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white/80 text-[0.8125rem] font-bold uppercase tracking-[0.06em] border border-white/15 mb-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#34C759] opacity-70" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#34C759]" />
+              </span>
               Our Impact
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-white">
-              Numbers that speak for themselves
+            <h2 className="text-[2rem] md:text-[2.5rem] lg:text-[2.85rem] font-extrabold tracking-tight text-white leading-[1.1]">
+              Numbers that{" "}
+              <span className="gradient-text-vivid">speak for themselves</span>
             </h2>
+            <div className="section-accent mx-auto mt-5" />
           </ScrollReveal>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <ScrollReveal delay={0}><StatCounter target={5000} suffix="+" label="Happy Students" /></ScrollReveal>
@@ -571,20 +539,17 @@ export default function Home() {
       {/* ══════════════════════ HOW IT WORKS ══════════════════════ */}
       <section className="py-20 md:py-28 section-mesh-bg">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <ScrollReveal className="text-center mb-14">
-            <span className="section-label-purple mb-4 inline-flex">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-              </svg>
-              Your Journey
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1D1D1F] mt-3">
-              From Consultation to{" "}
-              <span className="gradient-text-vivid">Graduation</span>
-            </h2>
-            <p className="text-[#6E6E73] max-w-xl mx-auto text-base mt-4">
-              Our simple 4-step process gets you admitted to your dream university without the stress.
-            </p>
+          <ScrollReveal className="mb-14">
+            <SectionHeading
+              eyebrow="Your Journey"
+              title={
+                <>
+                  From Consultation to{" "}
+                  <span className="gradient-text-vivid">Graduation</span>
+                </>
+              }
+              subtitle="Our simple 4-step process gets you admitted to your dream university without the stress."
+            />
           </ScrollReveal>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -663,67 +628,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════════════════ UNIVERSITIES ══════════════════════ */}
-      <section className="py-20 md:py-28 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <ScrollReveal className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-4">
-            <div>
-              <span className="section-label mb-4 inline-flex">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16" />
-                </svg>
-                Partner Universities
-              </span>
-              <h2 className="text-3xl md:text-4xl font-bold text-[#1D1D1F] mt-3">
-                Top universities we work with
-              </h2>
-              <p className="text-[#6E6E73] mt-2 text-sm">
-                All UGC-recognized — your degree is valid across India.
-              </p>
-            </div>
-            <Link
-              href="/universities"
-              className="inline-flex items-center gap-2 text-[#4F46E5] font-semibold text-sm hover:underline shrink-0"
-            >
-              View all universities →
-            </Link>
-          </ScrollReveal>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
-            {universities.map((uni, i) => (
-              <ScrollReveal key={uni.name} delay={i * 60}>
-                <Link
-                  href={`/universities/${uni.slug}`}
-                  className="university-card bg-white rounded-2xl p-4 border border-[#E5E5EA] flex flex-col items-center text-center gap-2.5 group"
-                >
-                  <div
-                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${uni.color} flex items-center justify-center text-white font-bold text-base shadow-lg group-hover:scale-110 transition-transform duration-300`}
-                  >
-                    {uni.abbr}
-                  </div>
-                  <div>
-                    <p className="text-[#1D1D1F] font-semibold text-xs leading-tight">
-                      {uni.name}
-                    </p>
-                    <p className="text-[#AEAEB2] text-xs mt-0.5">
-                      {uni.courses} courses
-                    </p>
-                  </div>
-                </Link>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ══════════════════════ WHY CHOOSE US ══════════════════════ */}
       <section className="py-20 md:py-28 hero-mesh-bg">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <ScrollReveal className="text-center mb-14">
-            <span className="section-label-purple mb-4 inline-flex">Why Vidyavasal?</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1D1D1F] mt-3">
-              Why 5,000+ students chose <span className="gradient-text-vivid">Vidyavasal</span>
-            </h2>
+          <ScrollReveal className="mb-14">
+            <SectionHeading
+              eyebrow="Why Vidyavasal?"
+              title={
+                <>
+                  Why 5,000+ students chose{" "}
+                  <span className="gradient-text-vivid">Vidyavasal</span>
+                </>
+              }
+            />
           </ScrollReveal>
 
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -776,17 +693,18 @@ export default function Home() {
       {/* ══════════════════════ TESTIMONIALS ══════════════════════ */}
       <section className="py-20 md:py-28 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <ScrollReveal className="text-center mb-14">
-            <span className="section-label-purple mb-4 inline-flex items-center gap-1.5">
-              <Star className="w-4 h-4 fill-current" />
-              Student Stories
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1D1D1F] mt-3">
-              Real students, <span className="gradient-text-vivid">real results</span>
-            </h2>
-            <p className="text-[#6E6E73] max-w-xl mx-auto text-base mt-4">
-              Hear from students who transformed their careers with Vidyavasal&apos;s guidance.
-            </p>
+          <ScrollReveal className="mb-14">
+            <SectionHeading
+              eyebrow="Student Stories"
+              icon={<Star className="w-3.5 h-3.5 fill-current" />}
+              title={
+                <>
+                  Real students,{" "}
+                  <span className="gradient-text-vivid">real results</span>
+                </>
+              }
+              subtitle="Hear from students who transformed their careers with Vidyavasal's guidance."
+            />
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -882,11 +800,14 @@ export default function Home() {
               />
 
               <div className="relative z-10">
-                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white/80 text-sm font-semibold border border-white/10 mb-6">
-                  <span className="w-2 h-2 rounded-full bg-[#34C759] animate-pulse-soft" />
+                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white/80 text-[0.8125rem] font-bold uppercase tracking-[0.06em] border border-white/15 mb-6 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#34C759] opacity-70" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#34C759]" />
+                  </span>
                   Admissions Open 2026
                 </span>
-                <h2 className="text-3xl md:text-5xl font-bold text-white mb-5 leading-tight">
+                <h2 className="text-[2rem] md:text-5xl font-extrabold text-white mb-5 leading-[1.1] tracking-tight">
                   Ready to Get Admitted to Your
                   <br className="hidden md:block" />
                   <span className="gradient-text-vivid">Dream University?</span>

@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Search, ChevronDown, Clock, GraduationCap, Building2, ArrowRight, X } from 'lucide-react';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 export interface CourseSummary {
@@ -26,27 +27,17 @@ export interface CourseSummary {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const CATEGORY_COLORS: Record<string, string> = {
-  UG: 'bg-[#E8F2FF] text-[#007AFF]',
-  PG: 'bg-[#F0EBFF] text-[#7B61FF]',
-  Diploma: 'bg-[#E8FAF0] text-[#34C759]',
-  Certificate: 'bg-[#FFF3E0] text-[#FF9500]',
-};
-
-const MODE_COLORS: Record<string, string> = {
-  Online: 'bg-[#FFF3E0] text-[#FF9500]',
-  ODL: 'bg-[#F5F5F7] text-[#6E6E73]',
-  Distance: 'bg-[#F5F5F7] text-[#6E6E73]',
+  UG: 'bg-[#EEF2FF] text-[#4F46E5]',
+  PG: 'bg-[#F0EBFF] text-[#7C3AED]',
+  Diploma: 'bg-[#E0F7FF] text-[#0EA5E9]',
+  Certificate: 'bg-[#E8FAF0] text-[#10B981]',
 };
 
 const UNI_GRADIENT = [
-  'from-[#7B61FF] to-[#007AFF]',
-  'from-[#007AFF] to-[#5AC8FA]',
-  'from-[#FF9500] to-[#FF6B00]',
-  'from-[#34C759] to-[#00A844]',
-  'from-[#FF3B30] to-[#FF6B00]',
-  'from-[#5AC8FA] to-[#007AFF]',
-  'from-[#AF52DE] to-[#7B61FF]',
-  'from-[#FF2D55] to-[#FF6B00]',
+  'from-[#4F46E5] to-[#7C3AED]',
+  'from-[#7C3AED] to-[#0EA5E9]',
+  'from-[#6366F1] to-[#06B6D4]',
+  'from-[#8B5CF6] to-[#4F46E5]',
 ];
 
 function uniGradient(name: string | null): string {
@@ -63,16 +54,42 @@ function formatFee(fee: string | null): string {
   return `₹${n.toLocaleString('en-IN')}`;
 }
 
-function feeNum(fee: string | null): number {
-  if (!fee) return 0;
-  return parseFloat(fee) || 0;
-}
-
 function formatDuration(years: string | null): string {
   if (!years) return '—';
   const n = parseFloat(years);
   if (isNaN(n)) return years;
   return n === 1 ? '1 Year' : `${n} Years`;
+}
+
+// ── Reusable select ───────────────────────────────────────────────────────────
+function FilterSelect({
+  value,
+  onChange,
+  children,
+  icon,
+  className = '',
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  children: React.ReactNode;
+  icon: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={`relative ${className}`}>
+      <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9381FF]">
+        {icon}
+      </span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full appearance-none rounded-xl border border-[#E5E0F7] bg-white py-3 pl-10 pr-9 text-sm font-medium text-[#1D1D1F] transition-colors focus:border-[#7C3AED] focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/20"
+      >
+        {children}
+      </select>
+      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#AEAEB2]" />
+    </div>
+  );
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -83,150 +100,141 @@ interface Props {
 
 export function CoursesDashboard({ courses, initialQuery = '' }: Props) {
   const [query, setQuery] = useState(initialQuery);
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedMode, setSelectedMode] = useState('All');
-  const [sortBy, setSortBy] = useState('default');
+  const [university, setUniversity] = useState('All'); // universityId
+  const [courseType, setCourseType] = useState('All');
 
-  // Derive available filter options from data
-  const categories = useMemo(() => {
+  // Mirror the header's hide-on-scroll-down logic so the sticky filter bar rises
+  // to the top when the navbar hides, and drops back below it on scroll up.
+  const [headerHidden, setHeaderHidden] = useState(false);
+  const lastY = useRef(0);
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y > 140 && y > lastY.current) setHeaderHidden(true);
+      else if (y < lastY.current) setHeaderHidden(false);
+      lastY.current = y;
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Unique universities present in the catalog (for the dropdown).
+  const universities = useMemo(() => {
+    const map = new Map<string, string>();
+    courses.forEach((c) => {
+      if (c.universityId && c.universityName) map.set(c.universityId, c.universityName);
+    });
+    return Array.from(map, ([id, name]) => ({ id, name })).sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+  }, [courses]);
+
+  // Course types (UG, PG, …) present in the catalog.
+  const courseTypes = useMemo(() => {
     const seen = new Set<string>();
     courses.forEach((c) => { if (c.courseType) seen.add(c.courseType); });
     const order = ['UG', 'PG', 'Diploma', 'Certificate'];
     const sorted = order.filter((x) => seen.has(x));
-    // Add any unlisted ones
     seen.forEach((x) => { if (!order.includes(x)) sorted.push(x); });
-    return ['All', ...sorted];
-  }, [courses]);
-
-  const modes = useMemo(() => {
-    const seen = new Set<string>();
-    courses.forEach((c) => { if (c.deliveryMode) seen.add(c.deliveryMode); });
-    return ['All', ...Array.from(seen).sort()];
+    return sorted;
   }, [courses]);
 
   const filtered = useMemo(() => {
-    let list = courses.filter((c) => {
-      const q = query.toLowerCase();
+    const q = query.trim().toLowerCase();
+    return courses.filter((c) => {
       const matchesQuery =
-        !query ||
+        !q ||
         c.name.toLowerCase().includes(q) ||
-        (c.universityName ?? '').toLowerCase().includes(q) ||
-        (c.categoryName ?? '').toLowerCase().includes(q) ||
-        (c.description ?? '').toLowerCase().includes(q);
-      const matchesCategory = selectedCategory === 'All' || c.courseType === selectedCategory;
-      const matchesMode = selectedMode === 'All' || c.deliveryMode === selectedMode;
-      return matchesQuery && matchesCategory && matchesMode;
+        (c.universityName ?? '').toLowerCase().includes(q);
+      const matchesUni = university === 'All' || c.universityId === university;
+      const matchesType = courseType === 'All' || c.courseType === courseType;
+      return matchesQuery && matchesUni && matchesType;
     });
+  }, [query, university, courseType, courses]);
 
-    if (sortBy === 'fee-asc') {
-      list = [...list].sort((a, b) => feeNum(a.totalFee) - feeNum(b.totalFee));
-    } else if (sortBy === 'fee-desc') {
-      list = [...list].sort((a, b) => feeNum(b.totalFee) - feeNum(a.totalFee));
-    } else if (sortBy === 'name-asc') {
-      list = [...list].sort((a, b) => a.name.localeCompare(b.name));
-    }
-
-    return list;
-  }, [query, selectedCategory, selectedMode, sortBy, courses]);
+  const hasFilters = query !== '' || university !== 'All' || courseType !== 'All';
+  const clearAll = () => { setQuery(''); setUniversity('All'); setCourseType('All'); };
 
   return (
     <div>
-      {/* ── Search + Filters ── */}
-      <div className="bg-white border-b border-[#E5E5EA] py-5 sticky top-[72px] z-40">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="flex flex-col sm:flex-row gap-3 flex-wrap">
+      {/* ── Search + Filters (sticks below the header, rises to top when it hides) ── */}
+      <div
+        style={{ top: headerHidden ? 8 : 84 }}
+        className="sticky z-40 border-y border-[#ECE9FB] bg-white/85 py-3.5 backdrop-blur-xl transition-[top] duration-300 ease-out"
+      >
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
             {/* Search */}
-            <div className="relative flex-1 min-w-[200px]">
-              <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#AEAEB2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#AEAEB2]" />
               <input
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search course, university, or program..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E5E5EA] bg-white text-[#1D1D1F] text-sm placeholder:text-[#AEAEB2] focus:outline-none focus:ring-2 focus:ring-[#7B61FF]/30 focus:border-[#7B61FF]"
+                placeholder="Search course or university…"
+                className="w-full rounded-xl border border-[#E5E0F7] bg-white py-3 pl-11 pr-4 text-sm text-[#1D1D1F] placeholder:text-[#AEAEB2] focus:border-[#7C3AED] focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/20"
               />
             </div>
 
-            {/* Category Filter */}
-            <div className="flex gap-1.5 flex-wrap">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                    selectedCategory === cat
-                      ? 'btn-gradient text-white shadow-sm'
-                      : 'bg-[#F5F5F7] text-[#6E6E73] hover:bg-[#E8F2FF] hover:text-[#007AFF]'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
+            {/* Dropdowns */}
+            <div className="grid grid-cols-2 gap-3 lg:flex lg:shrink-0">
+              <FilterSelect
+                value={university}
+                onChange={setUniversity}
+                icon={<Building2 className="h-4 w-4" />}
+                className="lg:w-56"
+              >
+                <option value="All">All Universities</option>
+                {universities.map((u) => (
+                  <option key={u.id} value={u.id}>{u.name}</option>
+                ))}
+              </FilterSelect>
 
-            {/* Mode Filter */}
-            <div className="flex gap-1.5 flex-wrap">
-              {modes.map((mode) => (
-                <button
-                  key={mode}
-                  onClick={() => setSelectedMode(mode)}
-                  className={`px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                    selectedMode === mode
-                      ? 'bg-[#1D1D1F] text-white'
-                      : 'bg-[#F5F5F7] text-[#6E6E73] hover:bg-[#E8F2FF] hover:text-[#007AFF]'
-                  }`}
-                >
-                  {mode}
-                </button>
-              ))}
+              <FilterSelect
+                value={courseType}
+                onChange={setCourseType}
+                icon={<GraduationCap className="h-4 w-4" />}
+                className="lg:w-44"
+              >
+                <option value="All">All Programs</option>
+                {courseTypes.map((t) => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
+              </FilterSelect>
             </div>
-
-            {/* Sort */}
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="px-3 py-2.5 rounded-xl border border-[#E5E5EA] text-sm text-[#6E6E73] bg-white focus:outline-none focus:ring-2 focus:ring-[#7B61FF]/30"
-            >
-              <option value="default">Sort: Default</option>
-              <option value="name-asc">Name: A → Z</option>
-              <option value="fee-asc">Fee: Low to High</option>
-              <option value="fee-desc">Fee: High to Low</option>
-            </select>
           </div>
         </div>
       </div>
 
       {/* ── Results ── */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-8">
-        <div className="flex items-center justify-between mb-6">
-          <p className="text-[#6E6E73] text-sm">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-6 flex items-center justify-between">
+          <p className="text-sm text-[#6E6E73]">
             Showing <span className="font-semibold text-[#1D1D1F]">{filtered.length}</span> of{' '}
             <span className="font-semibold text-[#1D1D1F]">{courses.length}</span> programs
           </p>
-          {(query || selectedCategory !== 'All' || selectedMode !== 'All') && (
+          {hasFilters && (
             <button
-              onClick={() => { setQuery(''); setSelectedCategory('All'); setSelectedMode('All'); }}
-              className="text-[#007AFF] text-sm font-medium hover:underline"
+              onClick={clearAll}
+              className="inline-flex items-center gap-1 text-sm font-medium text-[#7C3AED] hover:underline"
             >
+              <X className="h-3.5 w-3.5" />
               Clear filters
             </button>
           )}
         </div>
 
         {filtered.length === 0 ? (
-          <div className="text-center py-20">
-            <div className="w-16 h-16 rounded-2xl bg-[#F5F5F7] flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-[#AEAEB2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+          <div className="py-20 text-center">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#F5F3FF]">
+              <Search className="h-8 w-8 text-[#9381FF]" />
             </div>
-            <p className="text-[#1D1D1F] font-semibold text-lg mb-2">No programs found</p>
-            <p className="text-[#6E6E73]">Try different keywords or clear the filters</p>
+            <p className="mb-2 text-lg font-semibold text-[#1D1D1F]">No programs found</p>
+            <p className="text-[#6E6E73]">Try a different search or clear the filters.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
             {filtered.map((course) => {
               const href =
                 course.universitySlug && course.slug
@@ -234,86 +242,73 @@ export function CoursesDashboard({ courses, initialQuery = '' }: Props) {
                   : '#';
 
               return (
-                <Link href={href} key={course.id} className="block group">
-                  <div className="bg-white rounded-2xl border border-[#E5E5EA] card-hover h-full flex flex-col relative overflow-hidden">
-                    {/* Top gradient line on hover */}
-                    <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#7B61FF] to-[#007AFF] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 z-10" />
+                <Link
+                  href={href}
+                  key={course.id}
+                  className="university-card group flex flex-col overflow-hidden rounded-2xl border border-[#ECE9FB] bg-white shadow-[0_1px_3px_rgba(79,70,229,0.06)] transition-colors hover:border-[#C4B5FD]"
+                >
+                  {/* ── Image (16:9) ── */}
+                  <div className="relative aspect-video w-full overflow-hidden bg-[#F5F3FF]">
+                    {course.bannerImage ? (
+                      <Image
+                        src={course.bannerImage}
+                        alt={course.name}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                    ) : (
+                      <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${uniGradient(course.universityName)}`}>
+                        <span className="text-4xl font-bold text-white/90">
+                          {course.universityName?.split(' ').map((w) => w[0]).slice(0, 2).join('') ?? '??'}
+                        </span>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1a0a3e]/45 via-transparent to-transparent" />
 
-                    {/* Image / Placeholder */}
-                    <div className="relative w-full h-40 overflow-hidden rounded-t-2xl bg-[#F5F5F7] shrink-0">
-                      {course.bannerImage ? (
-                        <Image
-                          src={course.bannerImage}
-                          alt={course.name}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
-                      ) : (
-                        <div className={`w-full h-full bg-gradient-to-br ${uniGradient(course.universityName)} flex items-center justify-center`}>
-                          <span className="text-white font-bold text-3xl opacity-80">
-                            {course.universityName?.split(' ').map((w) => w[0]).slice(0, 2).join('') ?? '??'}
-                          </span>
-                        </div>
-                      )}
-                      {/* Delivery mode badge */}
-                      {course.deliveryMode && (
-                        <span className={`absolute top-3 right-3 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${MODE_COLORS[course.deliveryMode] ?? 'bg-white/80 text-[#6E6E73]'}`}>
-                          {course.deliveryMode}
+                    {/* Badges */}
+                    <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+                      {course.courseType && (
+                        <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-bold shadow-sm ${CATEGORY_COLORS[course.courseType] ?? 'bg-white/90 text-[#6E6E73]'}`}>
+                          {course.courseType}
                         </span>
                       )}
                     </div>
+                    {course.deliveryMode && (
+                      <span className="absolute right-3 top-3 inline-flex items-center rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-semibold text-[#4F46E5] shadow-sm ring-1 ring-white/60 backdrop-blur-sm">
+                        {course.deliveryMode}
+                      </span>
+                    )}
+                  </div>
 
-                    {/* Body */}
-                    <div className="p-5 flex flex-col flex-1">
-                      {/* Category badge */}
-                      <div className="flex items-center justify-between mb-3">
-                        {course.courseType && (
-                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${CATEGORY_COLORS[course.courseType] ?? 'bg-[#F5F5F7] text-[#6E6E73]'}`}>
-                            {course.courseType}
-                          </span>
-                        )}
-                        {course.categoryName && (
-                          <span className="text-xs text-[#AEAEB2] font-medium">{course.categoryName}</span>
-                        )}
+                  {/* ── Body ── */}
+                  <div className="flex flex-1 flex-col p-3.5 sm:p-5">
+                    <h3 className="line-clamp-2 text-sm font-bold leading-snug text-[#1D1D1F] transition-colors group-hover:text-[#4F46E5] sm:text-base">
+                      {course.name}
+                    </h3>
+
+                    <p className="mt-1.5 flex items-center gap-1.5 text-xs text-[#6E6E73] sm:text-sm">
+                      <Building2 className="h-3.5 w-3.5 shrink-0 text-[#A78BFA]" />
+                      <span className="truncate">{course.universityName ?? '—'}</span>
+                    </p>
+
+                    {course.durationYears && (
+                      <span className="mt-2.5 inline-flex w-fit items-center gap-1.5 rounded-lg bg-[#F6F4FF] px-2 py-1 text-[11px] font-medium text-[#5B21B6] sm:mt-3 sm:px-2.5 sm:text-xs">
+                        <Clock className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                        {formatDuration(course.durationYears)}
+                      </span>
+                    )}
+
+                    {/* Footer */}
+                    <div className="mt-auto flex items-end justify-between border-t border-[#F1EEFC] pt-3 sm:pt-4">
+                      <div className="min-w-0">
+                        <span className="text-[10px] font-medium text-[#AEAEB2] sm:text-[11px]">Total Fee</span>
+                        <p className="truncate text-base font-extrabold text-[#1D1D1F] sm:text-lg">{formatFee(course.totalFee)}</p>
                       </div>
-
-                      {/* Title */}
-                      <h3 className="text-base font-bold text-[#1D1D1F] mb-1 group-hover:text-[#7B61FF] transition-colors leading-tight line-clamp-2">
-                        {course.name}
-                      </h3>
-                      <p className="text-[#6E6E73] text-sm mb-3">{course.universityName ?? '—'}</p>
-
-                      {/* Description */}
-                      {course.description && (
-                        <p className="text-xs text-[#AEAEB2] mb-3 line-clamp-2">{course.description}</p>
-                      )}
-
-                      {/* Duration */}
-                      <div className="flex flex-wrap gap-2 mb-4 mt-auto">
-                        {course.durationYears && (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#F5F5F7] rounded-lg text-xs text-[#6E6E73]">
-                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            {formatDuration(course.durationYears)}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Footer */}
-                      <div className="flex items-center justify-between pt-4 border-t border-[#F5F5F7]">
-                        <div>
-                          <span className="text-xs text-[#AEAEB2]">Total Fee</span>
-                          <p className="text-base font-bold text-[#1D1D1F]">{formatFee(course.totalFee)}</p>
-                        </div>
-                        <span className="text-[#7B61FF] font-semibold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
-                          View Details
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                          </svg>
-                        </span>
-                      </div>
+                      <span className="inline-flex shrink-0 items-center gap-1 text-xs font-bold text-[#4F46E5] sm:text-sm">
+                        View
+                        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 sm:h-4 sm:w-4" />
+                      </span>
                     </div>
                   </div>
                 </Link>

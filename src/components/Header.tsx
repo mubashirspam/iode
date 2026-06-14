@@ -2,27 +2,48 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { Landmark, GraduationCap } from 'lucide-react';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const pathname = usePathname();
 
+  // On the courses page only, hide the navbar when scrolling down (so the sticky
+  // filter bar becomes the top bar) and reveal it again on scroll up.
+  const hideOnScroll = pathname === '/courses';
+  const lastY = useRef(0);
+
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 12);
+    const handleScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 12);
+
+      if (hideOnScroll && !mobileMenuOpen) {
+        if (y > 140 && y > lastY.current) setHidden(true);
+        else if (y < lastY.current) setHidden(false);
+      } else {
+        setHidden(false);
+      }
+      lastY.current = y;
+    };
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [hideOnScroll, mobileMenuOpen]);
 
   const isActive = (href: string) =>
     href === '/' ? pathname === '/' : pathname.startsWith(href);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-3 sm:px-4 pt-3 sm:pt-4 pointer-events-none">
+    <header
+      className={`fixed inset-x-0 top-0 z-50 px-3 sm:px-4 pt-3 sm:pt-4 pointer-events-none transition-transform duration-300 ease-out ${
+        hidden ? '-translate-y-[130%]' : 'translate-y-0'
+      }`}
+    >
       <div
         className={`pointer-events-auto mx-auto max-w-6xl transition-all duration-300 ${
           mobileMenuOpen ? 'rounded-3xl' : 'rounded-full'

@@ -51,13 +51,20 @@ export const metadata: Metadata = {
     title: "Vidyavasal - University Admissions & Distance Education | Kerala",
     description: "Expert guidance for university admissions, distance education, and courses across India. 5,000+ students enrolled.",
     locale: "en_IN",
-    images: [{ url: "/logo.svg", width: 572, height: 152, alt: "Vidyavasal - Learn Anywhere. Grow Everywhere." }],
+    images: [
+      {
+        url: "/poster.jpg",
+        width: 1024,
+        height: 1280,
+        alt: "Vidyavasal — Online Degree. Learn Anywhere. Grow Everywhere.",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Vidyavasal - University Admissions & Distance Education",
     description: "Expert guidance for university admissions and distance education across India.",
-    images: ["/logo.svg"],
+    images: ["/poster.jpg"],
   },
   // Driven by env so only the production domain is indexable; staging is noindex.
   robots: {

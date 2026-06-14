@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { CoursesDashboard } from "@/components/CoursesDashboard";
 import { getCourses, getAdminStats } from "@/lib/db/queries";
 import Link from "next/link";
+import Image from "next/image";
 import JsonLd from "@/components/JsonLd";
 import { itemListLd, breadcrumbLd } from "@/lib/seo/jsonld";
 
@@ -43,52 +44,80 @@ export default async function CoursesPage() {
         ]}
       />
       {/* ── Header ── */}
-      <section className="hero-mesh-bg pt-10 pb-8 md:pt-16 md:pb-10">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-            <div>
-              <span className="section-label-purple mb-4 inline-flex">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
+      <section className="relative overflow-hidden pt-28 pb-10 md:pt-32 md:pb-14" style={{ background: "linear-gradient(135deg, #1a0a3e 0%, #2b1066 45%, #0f1e54 100%)" }}>
+        {/* Decorative pattern + orbs */}
+        <div className="absolute inset-0 dot-pattern opacity-10 pointer-events-none" />
+        <div
+          className="absolute -top-20 -right-16 w-96 h-96 rounded-full blur-3xl opacity-25 pointer-events-none"
+          style={{ background: "radial-gradient(circle, #7C3AED, transparent)" }}
+        />
+        <div
+          className="absolute bottom-0 left-0 w-80 h-80 rounded-full blur-3xl opacity-20 pointer-events-none"
+          style={{ background: "radial-gradient(circle, #0EA5E9, transparent)" }}
+        />
+
+        <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
+            {/* Copy */}
+            <div className="max-w-2xl">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white/85 text-[0.8125rem] font-bold uppercase tracking-[0.06em] border border-white/15 mb-5">
+                <svg className="w-4 h-4 text-[#A78BFA]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 Course Explorer
               </span>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1D1D1F] mt-2 leading-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-[1.05] tracking-tight">
                 Find Your{" "}
-                <span className="gradient-text-purple">Perfect Course</span>
+                <span className="gradient-text-vivid">Perfect Course</span>
               </h1>
-              <p className="text-[#6E6E73] mt-3 text-base max-w-xl">
-                {stats.courses}+ programs from {stats.universities}+
-                UGC-recognized universities. Filter by type, mode, and fee to
+              <p className="text-white/65 mt-5 text-base md:text-lg max-w-xl leading-relaxed">
+                {stats.courses}+ programs from {stats.universities}+ UGC-recognized
+                universities. Search and filter by university and program level to
                 find what fits you.
               </p>
+
+              {/* Stats row */}
+              <div className="mt-8 flex flex-wrap gap-3">
+                {[
+                  { value: `${stats.courses}+`, label: "Courses", color: "#A78BFA" },
+                  { value: `${stats.universities}+`, label: "Universities", color: "#5AC8FA" },
+                  { value: "UGC", label: "Approved", color: "#34C759" },
+                ].map((s) => (
+                  <div
+                    key={s.label}
+                    className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 backdrop-blur-sm"
+                  >
+                    <p className="text-2xl font-extrabold" style={{ color: s.color }}>{s.value}</p>
+                    <p className="mt-0.5 text-xs text-white/60">{s.label}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="flex gap-4 shrink-0">
-              <div className="text-center px-5 py-3 bg-white rounded-2xl border border-[#E5E5EA] shadow-sm">
-                <p className="text-2xl font-extrabold text-[#7B61FF]">
-                  {stats.courses}+
-                </p>
-                <p className="text-xs text-[#6E6E73] mt-0.5">Courses</p>
+
+            {/* Image */}
+            <div className="relative hidden lg:block w-[360px] shrink-0">
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[1.75rem] border-4 border-white/10 shadow-2xl shadow-black/30">
+                <Image
+                  src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80"
+                  alt="Students exploring online courses"
+                  fill
+                  sizes="360px"
+                  className="object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1a0a3e]/50 via-transparent to-transparent" />
               </div>
-              <div className="text-center px-5 py-3 bg-white rounded-2xl border border-[#E5E5EA] shadow-sm">
-                <p className="text-2xl font-extrabold text-[#007AFF]">
-                  {stats.universities}+
-                </p>
-                <p className="text-xs text-[#6E6E73] mt-0.5">Universities</p>
-              </div>
-              <div className="text-center px-5 py-3 bg-white rounded-2xl border border-[#E5E5EA] shadow-sm">
-                <p className="text-2xl font-extrabold text-[#34C759]">UGC</p>
-                <p className="text-xs text-[#6E6E73] mt-0.5">Approved</p>
+              {/* Floating badge */}
+              <div className="absolute -bottom-4 -left-4 flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-xl">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#4F46E5] to-[#7C3AED] text-white">
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+                <div>
+                  <p className="text-sm font-extrabold leading-none text-[#1D1D1F]">100% UGC Valid</p>
+                  <p className="mt-1 text-xs text-[#6E6E73]">Degrees across India</p>
+                </div>
               </div>
             </div>
           </div>

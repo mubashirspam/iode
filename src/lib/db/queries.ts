@@ -6,7 +6,7 @@ import {
   courseFeeStructures,
   adminUsers,
 } from "./schema";
-import { eq, sql, ilike, or, asc, desc } from "drizzle-orm";
+import { eq, sql, ilike, or, asc, desc, inArray, and, isNotNull } from "drizzle-orm";
 
 // ─── Admin Stats ────────────────────────────────────────────────────────────
 
@@ -51,6 +51,124 @@ export async function getUniversities() {
     .orderBy(asc(universities.name));
 
   return rows;
+}
+
+// Powers the homepage "Top universities we work with" carousel. Returns active
+// universities (newest first) enriched with a handful of their course names so
+// the cards can render course chips, plus flags for "New" / "Admissions Open".
+export type HomeUniversity = {
+  id: string;
+  name: string;
+  shortName: string | null;
+  slug: string | null;
+  logoUrl: string | null;
+  bannerImage: string | null;
+  universityType: string | null;
+  city: string | null;
+  state: string | null;
+  courseCount: number;
+  isNew: boolean;
+  admissionOpen: boolean;
+  courseChips: { name: string; isNew: boolean }[];
+};
+
+const NEW_WINDOW_MS = 45 * 24 * 60 * 60 * 1000; // 45 days
+
+export async function getHomeUniversities(limit = 12): Promise<HomeUniversity[]> {
+  const unis = await db
+    .select({
+      id: universities.id,
+      name: universities.name,
+      shortName: universities.shortName,
+      slug: universities.slug,
+      logoUrl: universities.logoUrl,
+      bannerImage: universities.bannerImage,
+      universityType: universities.universityType,
+      city: universities.city,
+      state: universities.state,
+      highlights: universities.highlights,
+      createdAt: universities.createdAt,
+      courseCount: sql<number>`(
+        SELECT count(*) FROM courses WHERE courses.university_id = universities.id
+      )`,
+    })
+    .from(universities)
+    .where(eq(universities.isActive, true))
+    .orderBy(desc(universities.createdAt))
+    .limit(limit);
+
+  if (unis.length === 0) return [];
+
+  // One extra query for every relevant course, grouped in JS — avoids N+1.
+  const uniIds = unis.map((u) => u.id);
+  const courseRows = await db
+    .select({
+      universityId: courses.universityId,
+      name: courses.name,
+      shortName: courses.shortName,
+      tags: courses.tags,
+      createdAt: courses.createdAt,
+    })
+    .from(courses)
+    .where(inArray(courses.universityId, uniIds))
+    .orderBy(desc(courses.createdAt));
+
+  const now = Date.now();
+  const isFresh = (d: Date | null) => !!d && now - new Date(d).getTime() < NEW_WINDOW_MS;
+
+  const byUni = new Map<string, { name: string; isNew: boolean }[]>();
+  for (const c of courseRows) {
+    if (!c.universityId) continue;
+    const list = byUni.get(c.universityId) ?? [];
+    if (list.length >= 6) continue; // cap chips per card
+    const taggedNew = (c.tags ?? []).some((t) => t.toLowerCase() === "new");
+    list.push({
+      name: c.shortName?.trim() || c.name,
+      isNew: taggedNew || isFresh(c.createdAt),
+    });
+    byUni.set(c.universityId, list);
+  }
+
+  return unis.map((u) => {
+    const h = (u.highlights ?? {}) as { admissionOpen?: boolean };
+    return {
+      id: u.id,
+      name: u.name,
+      shortName: u.shortName,
+      slug: u.slug,
+      logoUrl: u.logoUrl,
+      bannerImage: u.bannerImage,
+      universityType: u.universityType,
+      city: u.city,
+      state: u.state,
+      courseCount: Number(u.courseCount),
+      isNew: isFresh(u.createdAt),
+      admissionOpen: h.admissionOpen === true,
+      courseChips: byUni.get(u.id) ?? [],
+    };
+  });
+}
+
+// Lightweight list for the homepage logo marquee — every active university that
+// has a logo, name + slug only. Ordered by name for a stable strip.
+export type MarqueeUniversity = {
+  name: string;
+  slug: string | null;
+  logoUrl: string;
+};
+
+export async function getUniversityLogos(): Promise<MarqueeUniversity[]> {
+  const rows = await db
+    .select({
+      name: universities.name,
+      slug: universities.slug,
+      logoUrl: universities.logoUrl,
+    })
+    .from(universities)
+    .where(and(eq(universities.isActive, true), isNotNull(universities.logoUrl)))
+    .orderBy(asc(universities.name));
+
+  return rows.filter((r): r is MarqueeUniversity => !!r.logoUrl);
 }
 
 export async function getUniversityById(id: string) {
