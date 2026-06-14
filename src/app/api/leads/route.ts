@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { leads } from "@/lib/db/schema";
+import { trackerLeads } from "@/lib/db/tracker";
 
 export const runtime = "nodejs";
 
@@ -42,14 +43,17 @@ export async function POST(req: NextRequest) {
   const visitorId = req.cookies.get(VISITOR_COOKIE)?.value;
 
   try {
+    const name = body.name?.trim() || null;
+    const source = body.source || "enquiry_form";
+
     const [lead] = await db
       .insert(leads)
       .values({
-        name: body.name?.trim() || null,
+        name,
         phone,
         email: body.email?.trim() || null,
         message: body.message?.trim() || null,
-        source: body.source || "enquiry_form",
+        source,
         visitorId: isUuid(visitorId) ? visitorId : null,
         universityId: isUuid(body.universityId) ? body.universityId : null,
         courseId: isUuid(body.courseId) ? body.courseId : null,
@@ -58,6 +62,18 @@ export async function POST(req: NextRequest) {
         utmCampaign: body.utm_campaign || null,
       })
       .returning({ id: leads.id });
+
+    // Mirror into the tracker portal so it shows up in the lead panel.
+    await db.insert(trackerLeads).values({
+      name: name || "Unknown",
+      phone,
+      email: body.email?.trim() || null,
+      universityId: isUuid(body.universityId) ? body.universityId : null,
+      courseId: isUuid(body.courseId) ? body.courseId : null,
+      notes: body.message?.trim() || null,
+      source: source.length <= 60 ? source : "web_form",
+      status: "new",
+    });
 
     return NextResponse.json({ ok: true, id: lead.id });
   } catch {

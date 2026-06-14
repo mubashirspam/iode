@@ -46,6 +46,8 @@ type Body = {
   programLevel?: string;
   universityId?: string;
   courseId?: string;
+  source?: string;
+  notes?: string;
 };
 
 const isUuid = (v?: string) =>
@@ -95,7 +97,8 @@ export async function POST(req: NextRequest) {
         universityId: isUuid(body.universityId) ? body.universityId : null,
         courseId: isUuid(body.courseId) ? body.courseId : null,
         status: "new",
-        source: "web_form",
+        source: body.source && body.source.length <= 60 ? body.source : "web_form",
+        notes: body.notes?.trim() || null,
       })
       .returning({ id: trackerLeads.id });
 

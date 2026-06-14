@@ -11,13 +11,13 @@ import {
   Zap,
   Target,
   Lock,
-  Send,
 } from "lucide-react";
+import ContactForm from "@/components/ContactForm";
 
 export const metadata: Metadata = {
   title: "Contact Vidyavasal — Free University Admission Consultation",
   description:
-    "Get in touch with Vidyavasal for university admissions, counseling, and general inquiries. Free consultation available Mon–Sat 9am–7pm IST.",
+    "Get in touch with Vidyavasal for university admissions, counseling, and general inquiries. Free consultation available — open all hours.",
 };
 
 const contactMethods = [
@@ -25,7 +25,7 @@ const contactMethods = [
     Icon: Phone,
     label: "Call Us",
     value: "+91 70347 60995",
-    sub: "Mon–Sat · 9am–7pm IST",
+    sub: "Open All Hours",
     href: "tel:+917034760995",
     color: "#4F46E5",
     bg: "from-[#EEF2FF] to-[#E0E7FF]",
@@ -51,8 +51,8 @@ const contactMethods = [
   {
     Icon: MapPin,
     label: "Office",
-    value: "Kerala, India",
-    sub: "PIN 680000",
+    value: "Manathavady, Kerala",
+    sub: "PIN 670645",
     href: "#",
     color: "#F59E0B",
     bg: "from-[#FFFBEB] to-[#FEF3C7]",
@@ -110,7 +110,7 @@ export default function ContactPage() {
               <span className="text-sm font-medium text-[#1D1D1F]">
                 Counselors are available now
               </span>
-              <span className="text-sm text-[#6E6E73]">·  Mon–Sat, 9am–7pm IST</span>
+              <span className="text-sm text-[#6E6E73]">·  Open All Hours</span>
             </div>
           </ScrollReveal>
         </div>
@@ -172,7 +172,7 @@ export default function ContactPage() {
                   <div className="relative z-10">
                     <h2 className="text-xl font-bold mb-1">Contact Information</h2>
                     <p className="text-white/60 text-sm mb-8">
-                      Our counselors are available Mon–Sat, 9am–7pm IST.
+                      Our counselors are available all hours, every day.
                     </p>
 
                     <div className="space-y-5">
@@ -192,13 +192,13 @@ export default function ContactPage() {
                           title: "Office Address",
                           lines: [
                             "Institute of Distance Education",
-                            "Kerala, India — PIN 680000",
+                            "Manathavady, Kerala, India — PIN 670645",
                           ],
                         },
                         {
                           Icon: Clock,
                           title: "Working Hours",
-                          lines: ["Mon–Sat: 9:00 AM – 7:00 PM", "Sunday: Closed"],
+                          lines: ["Open All Hours · 7 Days a Week"],
                         },
                       ].map((item) => (
                         <div key={item.title} className="flex items-start gap-4">
@@ -270,118 +270,7 @@ export default function ContactPage() {
             {/* ── Right: Contact Form ── */}
             <div className="lg:col-span-3">
               <ScrollReveal direction="right">
-                <div className="bg-white rounded-3xl p-8 md:p-10 border border-[#E5E5EA] shadow-sm h-full">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4F46E5] to-[#7C3AED] flex items-center justify-center text-white shadow-md">
-                      <Send className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h2 className="text-xl font-bold text-[#1D1D1F]">Send an Enquiry</h2>
-                      <p className="text-[#6E6E73] text-xs">We respond within 2 hours on business days.</p>
-                    </div>
-                  </div>
-
-                  <div className="section-divider my-5" />
-
-                  <form className="space-y-5" action="/thank-you">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label htmlFor="name" className="block text-sm font-semibold text-[#1D1D1F] mb-1.5">
-                          Full Name <span className="text-[#EC4899]">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          id="name"
-                          required
-                          className="input-field"
-                          placeholder="Your full name"
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="phone" className="block text-sm font-semibold text-[#1D1D1F] mb-1.5">
-                          Phone / WhatsApp <span className="text-[#EC4899]">*</span>
-                        </label>
-                        <input
-                          type="tel"
-                          id="phone"
-                          required
-                          className="input-field"
-                          placeholder="+91 XXXXX XXXXX"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-semibold text-[#1D1D1F] mb-1.5">
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        className="input-field"
-                        placeholder="your@email.com"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="course" className="block text-sm font-semibold text-[#1D1D1F] mb-1.5">
-                        Interested Program
-                      </label>
-                      <select id="course" className="input-field">
-                        <option value="">Select a program...</option>
-                        <option value="admissions">University Admissions (UG / PG / MBA)</option>
-                        <option value="montessori">Montessori Counseling &amp; Training</option>
-                        <option value="other">Other / Not Sure</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label htmlFor="qualification" className="block text-sm font-semibold text-[#1D1D1F] mb-1.5">
-                        Current Qualification
-                      </label>
-                      <select id="qualification" className="input-field">
-                        <option value="">Select your qualification...</option>
-                        <option value="10th">10th Pass</option>
-                        <option value="12th">12th / +2 Pass</option>
-                        <option value="graduate">Graduate (UG)</option>
-                        <option value="postgraduate">Post Graduate (PG)</option>
-                        <option value="working">Working Professional</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label htmlFor="message" className="block text-sm font-semibold text-[#1D1D1F] mb-1.5">
-                        Tell us your goals
-                      </label>
-                      <textarea
-                        id="message"
-                        rows={4}
-                        className="input-field resize-none"
-                        placeholder="What are you looking to achieve? Any specific course or university in mind?"
-                      />
-                    </div>
-
-                    {/* Privacy note */}
-                    <div className="flex items-start gap-2.5 p-4 bg-[#F5F3FF] rounded-xl border border-[#E0E7FF]">
-                      <Lock className="w-5 h-5 text-[#4F46E5] shrink-0" />
-                      <p className="text-xs text-[#6E6E73] leading-relaxed">
-                        Your information is 100% confidential. We never share your data with third parties.
-                        By submitting, you agree to our{" "}
-                        <Link href="/privacy-policy" className="text-[#4F46E5] underline">Privacy Policy</Link>.
-                      </p>
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="w-full btn-gradient-vivid text-white font-bold py-4 rounded-xl btn-press shadow-lg flex items-center justify-center gap-2"
-                    >
-                      Submit Enquiry — It&apos;s Free
-                      <svg className="w-5 h-5 cta-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
-                    </button>
-                  </form>
-                </div>
+                <ContactForm />
               </ScrollReveal>
             </div>
           </div>

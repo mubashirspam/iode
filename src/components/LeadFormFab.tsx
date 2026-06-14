@@ -122,8 +122,6 @@ export default function LeadFormFab() {
           name: fd.get("name"),
           phone: fd.get("phone"),
           email: fd.get("email"),
-          age: fd.get("age"),
-          sex: fd.get("sex"),
           programLevel: fd.get("programLevel"),
           universityId,
           courseId,
@@ -234,19 +232,6 @@ export default function LeadFormFab() {
                   <label className="block col-span-2">
                     <span className={labelCls}>Email</span>
                     <input name="email" type="email" placeholder="Email (optional)" className={inputCls} />
-                  </label>
-                  <label className="block">
-                    <span className={labelCls}>Age</span>
-                    <input name="age" type="number" min={5} max={99} placeholder="Age" className={inputCls} />
-                  </label>
-                  <label className="block">
-                    <span className={labelCls}>Sex</span>
-                    <select name="sex" defaultValue="" className={inputCls}>
-                      <option value="">Select…</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
-                    </select>
                   </label>
                   <label className="block col-span-2">
                     <span className={labelCls}>Looking for</span>

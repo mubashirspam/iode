@@ -56,6 +56,7 @@ export default function Footer() {
               <li><Link href="/contact" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">Contact</Link></li>
               <li><Link href="/blog" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">Blog</Link></li>
               <li><Link href="/privacy-policy" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">Terms of Service</Link></li>
             </ul>
           </div>
 
@@ -85,7 +86,7 @@ export default function Footer() {
           <div className="flex items-center gap-6">
             <Link href="/privacy-policy" className="hover:text-[#007AFF] transition-colors">Privacy Policy</Link>
             <span className="text-[#E5E5EA]">|</span>
-            <Link href="/contact" className="hover:text-[#007AFF] transition-colors">Terms of Service</Link>
+            <Link href="/terms" className="hover:text-[#007AFF] transition-colors">Terms of Service</Link>
           </div>
         </div>
       </div>
