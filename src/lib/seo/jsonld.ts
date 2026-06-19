@@ -15,13 +15,6 @@ const num = (v: unknown): number | undefined => {
   return Number.isFinite(n) && n > 0 ? n : undefined;
 };
 
-const ISO_PRICE_VALID_DAYS = 365;
-function priceValidUntil(): string {
-  const d = new Date();
-  d.setDate(d.getDate() + ISO_PRICE_VALID_DAYS);
-  return d.toISOString().split("T")[0];
-}
-
 // ── Site-wide ───────────────────────────────────────────────────────────────
 
 export function organizationLd() {
@@ -179,7 +172,6 @@ type CourseLd = {
 export function courseLd(c: CourseLd) {
   const uniUrl = absoluteUrl(`/universities/${c.university.slug}`);
   const courseUrl = absoluteUrl(`/universities/${c.university.slug}/${c.slug}`);
-  const currency = c.fee?.currency || "INR";
   const mode =
     c.isOnline || c.deliveryMode?.toLowerCase().includes("online")
       ? "online"
@@ -187,49 +179,17 @@ export function courseLd(c: CourseLd) {
       ? "blended"
       : "onsite";
 
-  // Build an AggregateOffer over the fee breakdown so each fee component is
-  // machine-readable, with availability + validity.
-  const components: { name: string; price?: number }[] = [
-    { name: "Registration Fee", price: num(c.fee?.registrationFee) },
-    { name: "Admission Fee", price: num(c.fee?.admissionFee) },
-    { name: "Course Fee", price: num(c.fee?.courseFee) },
-    { name: "Exam Fee", price: num(c.fee?.examFee) },
-    { name: "Yearly Fee", price: num(c.fee?.yearlyFee) },
-  ].filter((x) => x.price !== undefined);
-
-  const total = num(c.fee?.totalFee);
-  const prices = components.map((x) => x.price!).filter(Boolean);
-
-  const offers =
-    total !== undefined || components.length
-      ? {
-          "@type": "AggregateOffer",
-          priceCurrency: currency,
-          ...(total !== undefined
-            ? { lowPrice: total, highPrice: total }
-            : prices.length
-            ? { lowPrice: Math.min(...prices), highPrice: Math.max(...prices) }
-            : {}),
-          offerCount: components.length || 1,
-          availability: "https://schema.org/InStock",
-          category: "Tuition",
-          url: courseUrl,
-          priceValidUntil: priceValidUntil(),
-          seller: { "@id": `${SITE_URL}/#organization` },
-          ...(components.length
-            ? {
-                offers: components.map((comp) => ({
-                  "@type": "Offer",
-                  name: comp.name,
-                  price: comp.price,
-                  priceCurrency: currency,
-                  availability: "https://schema.org/InStock",
-                  url: courseUrl,
-                })),
-              }
-            : {}),
-        }
-      : undefined;
+  // Pricing is intentionally omitted from structured data: fees are kept
+  // internal so every fee enquiry becomes a captured lead. We still emit an
+  // Offer (without a price) so the course is discoverable as an available
+  // program, with admission handled on request.
+  const offers = {
+    "@type": "Offer",
+    availability: "https://schema.org/InStock",
+    category: "Tuition",
+    url: courseUrl,
+    seller: { "@id": `${SITE_URL}/#organization` },
+  };
 
   const duration = num(c.durationYears);
 
@@ -241,7 +201,7 @@ export function courseLd(c: CourseLd) {
     url: courseUrl,
     description:
       c.description ||
-      `${c.name} offered by ${c.university.name}. View fee structure, eligibility, duration and admission details.`,
+      `${c.name} offered by ${c.university.name}. View eligibility, duration, delivery mode and admission details.`,
     ...(c.bannerImage ? { image: c.bannerImage } : {}),
     provider: {
       "@type": "CollegeOrUniversity",
@@ -262,7 +222,7 @@ export function courseLd(c: CourseLd) {
       location: { "@type": "VirtualLocation", url: courseUrl },
       offers,
     },
-    ...(offers ? { offers } : {}),
+    offers,
     ...(duration ? { timeToComplete: `P${duration}Y` } : {}),
     inLanguage: "en",
   };
@@ -286,18 +246,12 @@ export function faqLd(qa: { question: string; answer: string }[]) {
 /** Generate course FAQ Q&A from data — used for both schema and the visible accordion. */
 export function buildCourseFaq(c: CourseLd): { question: string; answer: string }[] {
   const uni = c.university.name;
-  const total = num(c.fee?.totalFee);
-  const fmt = (n: number) => `₹${n.toLocaleString("en-IN")}`;
   const out: { question: string; answer: string }[] = [];
 
-  if (total !== undefined) {
-    out.push({
-      question: `What is the fee for ${c.name} at ${uni}?`,
-      answer: `The total fee for ${c.name} at ${uni} is ${fmt(total)}${
-        num(c.fee?.yearlyFee) ? ` (approximately ${fmt(num(c.fee?.yearlyFee)!)} per year)` : ""
-      }. This is the full program fee through Vidyavasal.`,
-    });
-  }
+  out.push({
+    question: `What is the fee for ${c.name} at ${uni}?`,
+    answer: `Fees for ${c.name} at ${uni} depend on the latest scholarships and EMI options available. Request the current fee structure through Vidyavasal and our admissions team will share the full breakdown along with any discounts you qualify for.`,
+  });
   if (c.isOnline || c.isDistance || c.deliveryMode) {
     out.push({
       question: `Is ${c.name} available online or in distance mode?`,

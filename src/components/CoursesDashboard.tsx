@@ -47,13 +47,6 @@ function uniGradient(name: string | null): string {
   return UNI_GRADIENT[Math.abs(h) % UNI_GRADIENT.length];
 }
 
-function formatFee(fee: string | null): string {
-  if (!fee) return '—';
-  const n = parseFloat(fee);
-  if (isNaN(n)) return '—';
-  return `₹${n.toLocaleString('en-IN')}`;
-}
-
 function formatDuration(years: string | null): string {
   if (!years) return '—';
   const n = parseFloat(years);
@@ -300,13 +293,9 @@ export function CoursesDashboard({ courses, initialQuery = '' }: Props) {
                     )}
 
                     {/* Footer */}
-                    <div className="mt-auto flex items-end justify-between border-t border-[#F1EEFC] pt-3 sm:pt-4">
-                      <div className="min-w-0">
-                        <span className="text-[10px] font-medium text-[#AEAEB2] sm:text-[11px]">Total Fee</span>
-                        <p className="truncate text-base font-extrabold text-[#1D1D1F] sm:text-lg">{formatFee(course.totalFee)}</p>
-                      </div>
-                      <span className="inline-flex shrink-0 items-center gap-1 text-xs font-bold text-[#4F46E5] sm:text-sm">
-                        View
+                    <div className="mt-auto border-t border-[#F1EEFC] pt-3 sm:pt-4">
+                      <span className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#F6F4FF] py-2.5 text-xs font-bold text-[#4F46E5] transition-colors group-hover:bg-gradient-to-r group-hover:from-[#4F46E5] group-hover:to-[#7C3AED] group-hover:text-white sm:text-sm">
+                        View Details
                         <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 sm:h-4 sm:w-4" />
                       </span>
                     </div>

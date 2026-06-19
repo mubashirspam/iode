@@ -10,6 +10,14 @@ type Props = {
   /** Pre-filled context shown in the heading, e.g. course name. */
   context?: string;
   compact?: boolean;
+  /** Override the submit button label. */
+  submitLabel?: string;
+  /** Override the success state heading. */
+  successTitle?: string;
+  /** Override the success state body copy. */
+  successMessage?: string;
+  /** Fired once after a successful submission (e.g. to raise a toast). */
+  onSuccess?: () => void;
 };
 
 /**
@@ -22,6 +30,10 @@ export default function EnquiryForm({
   courseId,
   context,
   compact,
+  submitLabel,
+  successTitle,
+  successMessage,
+  onSuccess,
 }: Props) {
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">(
     "idle"
@@ -60,6 +72,7 @@ export default function EnquiryForm({
       if (!res.ok || !data.ok) throw new Error(data.error || "Failed");
       track("lead_submit", { source, context: context ?? "" });
       setStatus("done");
+      onSuccess?.();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
       setStatus("error");
@@ -69,9 +82,10 @@ export default function EnquiryForm({
   if (status === "done") {
     return (
       <div className="rounded-xl bg-green-50 border border-green-200 p-5 text-center">
-        <p className="font-semibold text-green-800">Thank you! 🎉</p>
+        <p className="font-semibold text-green-800">{successTitle ?? "Thank you! 🎉"}</p>
         <p className="text-sm text-green-700 mt-1">
-          Our admissions team will call you shortly{context ? ` about ${context}` : ""}.
+          {successMessage ??
+            `Our admissions team will call you shortly${context ? ` about ${context}` : ""}.`}
         </p>
       </div>
     );
@@ -118,7 +132,7 @@ export default function EnquiryForm({
         disabled={status === "loading"}
         className="w-full rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-semibold text-sm py-2.5 transition-colors"
       >
-        {status === "loading" ? "Submitting…" : "Get Free Counselling"}
+        {status === "loading" ? "Submitting…" : submitLabel ?? "Get Free Counselling"}
       </button>
     </form>
   );

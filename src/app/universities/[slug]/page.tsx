@@ -373,13 +373,8 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
                       </span>
                     )}
                   </div>
-                  <div className="mt-auto flex items-center justify-between pt-2">
-                    {course.totalFee ? (
-                      <span className="text-sm font-extrabold text-[#1D1D1F]">
-                        ₹{Number(course.totalFee).toLocaleString("en-IN")}
-                      </span>
-                    ) : <span />}
-                    <span className="text-xs font-bold text-[#4F46E5] group-hover:underline">
+                  <div className="mt-auto pt-3">
+                    <span className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#F6F4FF] py-2 text-xs font-bold text-[#4F46E5] transition-colors group-hover:bg-gradient-to-r group-hover:from-[#4F46E5] group-hover:to-[#7C3AED] group-hover:text-white">
                       View Course →
                     </span>
                   </div>

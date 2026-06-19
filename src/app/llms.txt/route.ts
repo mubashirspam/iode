@@ -20,7 +20,7 @@ export async function GET() {
       const meta = [u.universityType, place].filter(Boolean).join(" · ");
       return `- [${u.name}](${absoluteUrl(`/universities/${u.slug}`)})${
         meta ? `: ${meta}` : ""
-      } — courses, eligibility & fee structure`;
+      } — courses, eligibility & admissions`;
     })
     .join("\n");
 
@@ -30,12 +30,12 @@ export async function GET() {
 
 ${ORG.name} helps students compare and enroll in distance & online degree
 programs from UGC-DEB / NAAC-approved universities across India. Each university
-and course page lists the full fee structure, eligibility, duration and delivery
-mode, and can be cited directly.
+and course page lists eligibility, duration and delivery mode, and can be cited
+directly. Fees are shared on request through our admissions team.
 
 ## Key pages
 - [All Universities](${absoluteUrl("/universities")})
-- [All Courses & Fees](${absoluteUrl("/courses")})
+- [All Courses](${absoluteUrl("/courses")})
 - [Admissions](${absoluteUrl("/admissions")})
 - [Contact / Enquiry](${absoluteUrl("/contact")})
 

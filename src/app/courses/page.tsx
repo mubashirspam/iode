@@ -11,12 +11,12 @@ export const revalidate = 3600; // ISR: rebuild every hour
 export const metadata: Metadata = {
   title: "Browse Courses & Universities | Vidyavasal",
   description:
-    "Search 100+ courses across UGC-recognized universities. Filter by degree type, delivery mode, and fee range to find your perfect online or distance program.",
+    "Search 100+ courses across UGC-recognized universities. Filter by degree type and delivery mode to find your perfect online or distance program.",
   alternates: { canonical: "/courses" },
   openGraph: {
     title: "Browse Courses & Universities | Vidyavasal",
     description:
-      "Find the right online or distance course from India's top universities — filter by type, mode, and fee.",
+      "Find the right online or distance course from India's top universities — filter by type and mode.",
     type: "website",
   },
 };
@@ -29,7 +29,7 @@ export default async function CoursesPage() {
       <JsonLd
         data={[
           itemListLd(
-            "University Courses & Fees at Vidyavasal",
+            "University Courses at Vidyavasal",
             courses
               .filter((c) => c.universitySlug && c.slug)
               .map((c) => ({
