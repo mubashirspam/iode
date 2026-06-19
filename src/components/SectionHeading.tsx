@@ -30,31 +30,23 @@ export default function SectionHeading({
 }: Props) {
   const center = align === "center";
 
+  // `tone` retained for API compatibility; the minimal system uses one accent.
+  void tone;
+
   return (
     <div className={`${center ? "text-center" : ""} ${className}`}>
-      <span
-        className={`${tone === "blue" ? "section-label" : "section-label-purple"} ${
-          center ? "" : ""
-        }`}
-      >
-        {icon ?? (
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-current opacity-60" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-current" />
-          </span>
-        )}
+      <span className="eyebrow">
+        {icon}
         {eyebrow}
       </span>
 
-      <h2 className="mt-5 text-[2rem] font-extrabold leading-[1.1] tracking-tight text-[#1D1D1F] md:text-[2.5rem] lg:text-[2.85rem]">
+      <h2 className="mt-4 text-2xl font-bold leading-tight tracking-tight text-[#15151A] sm:text-3xl md:text-[2.25rem]">
         {title}
       </h2>
 
-      <div className={`section-accent mt-5 ${center ? "mx-auto" : ""}`} />
-
       {subtitle && (
         <p
-          className={`mt-4 text-base leading-relaxed text-[#6E6E73] ${
+          className={`mt-3 text-[15px] leading-relaxed text-[#5B5B66] ${
             center ? "mx-auto max-w-2xl" : "max-w-xl"
           }`}
         >

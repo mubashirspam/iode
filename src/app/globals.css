@@ -64,6 +64,12 @@ body {
   font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
+/* Headings use Poppins (display) over Inter (body) — modern SaaS/edu pairing. */
+h1, h2, h3, h4, h5, .font-display {
+  font-family: var(--font-poppins), var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.01em;
+}
+
 /* Glass Header */
 .glass-effect {
   background: rgba(255, 255, 255, 0.82);
@@ -715,3 +721,91 @@ button:hover .cta-arrow {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(123,97,255,0.3), rgba(0,122,255,0.3), transparent);
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   MINIMAL DESIGN SYSTEM (2026)
+   70% minimalism · 20% bento · 10% light glass. Calm, trustworthy, readable.
+   Single indigo accent, neutral text, thin borders, restrained shadows.
+   ════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --accent: #4F46E5;          /* indigo — single primary accent          */
+  --accent-ink: #4338CA;
+  --accent-soft: #EEF0FF;     /* tinted surface for accent chips/icons   */
+  --ink: #15151A;             /* headings                                */
+  --ink-2: #5B5B66;           /* body text                               */
+  --ink-3: #8A8A94;           /* muted / captions                        */
+  --line: #ECECF1;            /* hairline borders                        */
+  --surface-2: #F8F8FB;       /* alternating section background          */
+}
+
+/* Compact section rhythm — replaces the old py-20/py-28 "full size" blocks. */
+.section-y { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+@media (min-width: 768px) { .section-y { padding-top: 5rem; padding-bottom: 5rem; } }
+
+/* Minimal eyebrow label — quiet, no heavy gradient/shadow. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Solid accent text — used instead of animated gradient for headline words. */
+.text-accent { color: var(--accent); }
+
+/* Clean card — thin border, no gradient fill, gentle hover lift. */
+.card-minimal {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.card-minimal:hover {
+  border-color: #DCDCE6;
+  box-shadow: 0 6px 24px rgba(20, 20, 30, 0.06);
+  transform: translateY(-2px);
+}
+
+/* Soft accent icon tile. */
+.icon-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* Light glass — the restrained 10%. Used on dark heroes only. */
+.glass-soft {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Solid primary button (minimal, no animated gradient). */
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 1px 2px rgba(79, 70, 229, 0.25);
+}
+.btn-primary:hover { background: var(--accent-ink); box-shadow: 0 4px 16px rgba(79, 70, 229, 0.3); }
+
+/* Secondary / outline button. */
+.btn-outline {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }

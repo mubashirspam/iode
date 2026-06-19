@@ -91,7 +91,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${poppins.variable} h-full antialiased scroll-smooth`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${poppins.variable} h-full antialiased scroll-smooth`}>
       <head>
         {/* Preconnect to the image CDN — banner images are the LCP element */}
         <link rel="preconnect" href="https://ik.imagekit.io" crossOrigin="" />

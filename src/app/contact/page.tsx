@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { ScrollReveal } from "@/components/ScrollReveal";
-import Link from "next/link";
 import {
   Phone,
   MessageCircle,
@@ -70,47 +69,33 @@ export default function ContactPage() {
   return (
     <div>
       {/* ══════════════════════ HERO ══════════════════════ */}
-      <section className="relative overflow-hidden hero-vivid-bg pt-20 pb-12 md:pt-28 md:pb-16">
-        <div
-          className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-20 blob-1 pointer-events-none"
-          style={{
-            background: "radial-gradient(circle, #4F46E5, transparent)",
-            transform: "translate(30%, -40%)",
-          }}
-        />
-        <div
-          className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full opacity-15 blob-2 pointer-events-none"
-          style={{
-            background: "radial-gradient(circle, #0EA5E9, transparent)",
-            transform: "translate(-25%, 30%)",
-          }}
-        />
+      <section className="border-b border-[var(--line)] bg-[var(--surface-2)] py-12 md:py-16">
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center">
           <ScrollReveal>
-            <span className="section-label-purple mb-5 inline-flex">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span className="eyebrow mb-4 inline-flex">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
               Get in Touch
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1D1D1F] mt-3 mb-5 leading-tight">
-              Talk to Our{" "}
-              <span className="gradient-text-vivid">Admission Experts</span>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#15151A] mt-3 mb-5 leading-tight">
+              Talk to our{" "}
+              <span className="text-accent">admission experts</span>
             </h1>
-            <p className="text-lg text-[#6E6E73] max-w-xl mx-auto mb-10">
+            <p className="text-[15px] md:text-base text-[#5B5B66] max-w-xl mx-auto mb-8">
               Free consultation — no obligation. We&apos;ll help you find the perfect university and program for your goals.
             </p>
 
             {/* Live indicator */}
-            <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-white/80 backdrop-blur-sm rounded-full border border-white/90 shadow-sm">
+            <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-white rounded-full border border-[var(--line)]">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34C759] opacity-75" />
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#34C759]" />
               </span>
-              <span className="text-sm font-medium text-[#1D1D1F]">
+              <span className="text-sm font-medium text-[#15151A]">
                 Counselors are available now
               </span>
-              <span className="text-sm text-[#6E6E73]">·  Open All Hours</span>
+              <span className="text-sm text-[#8A8A94]">· Open All Hours</span>
             </div>
           </ScrollReveal>
         </div>
@@ -278,11 +263,11 @@ export default function ContactPage() {
       </section>
 
       {/* ══════════════════════ WHY CONTACT US ══════════════════════ */}
-      <section className="py-16 section-mesh-bg">
+      <section className="section-y bg-[var(--surface-2)]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
           <ScrollReveal className="text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-bold text-[#1D1D1F]">
-              Why reach out to <span className="gradient-text-vivid">Vidyavasal?</span>
+              Why reach out to <span className="text-accent">Vidyavasal?</span>
             </h2>
           </ScrollReveal>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">

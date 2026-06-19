@@ -32,8 +32,6 @@ import EnquiryForm from "@/components/EnquiryForm";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import EntityView from "@/components/EntityView";
 
-const PLACEHOLDER = "https://placehold.co/1200x400/1a0a3e/9381FF?text=University";
-
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
@@ -84,7 +82,6 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
     .filter((h) => h.value);
 
   const location = [uni.city, uni.state].filter(Boolean).join(", ");
-  const banner = uni.bannerImage || PLACEHOLDER;
 
   return (
     <>
@@ -111,128 +108,107 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
       />
       <EntityView event="view_university" entityType="university" entityId={uni.id} />
 
-      {/* ══════════════════════ HERO ══════════════════════ */}
-      <section className="relative">
-        {/* Banner image */}
-        <div className="relative h-[300px] w-full overflow-hidden sm:h-[360px] md:h-[420px]">
-          <Image
-            src={banner}
-            alt={uni.name}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-            unoptimized={!uni.bannerImage}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0524] via-[#1a0a3e]/70 to-[#1a0a3e]/30" />
-          <div className="absolute inset-0 dot-pattern opacity-10" />
-        </div>
-
-        {/* Overlaid content */}
-        <div className="container relative mx-auto -mt-44 px-4 sm:px-6 lg:px-8 max-w-6xl pb-2 sm:-mt-48">
+      {/* ══════════════════════ HERO (light, minimal) ══════════════════════ */}
+      <section className="border-b border-[var(--line)] bg-[var(--surface-2)]">
+        <div className="container mx-auto max-w-6xl px-4 py-8 sm:px-6 md:py-10 lg:px-8">
           {/* Breadcrumb */}
-          <nav className="mb-5 flex items-center gap-1.5 text-sm text-white/70">
-            <Link href="/" className="transition-colors hover:text-white">Home</Link>
-            <ChevronRight className="h-3.5 w-3.5 text-white/40" />
-            <Link href="/universities" className="transition-colors hover:text-white">Universities</Link>
-            <ChevronRight className="h-3.5 w-3.5 text-white/40" />
-            <span className="truncate font-medium text-white">{uni.shortName ?? uni.name}</span>
+          <nav className="mb-5 flex items-center gap-1.5 text-sm text-[#8A8A94]">
+            <Link href="/" className="transition-colors hover:text-[var(--accent)]">Home</Link>
+            <ChevronRight className="h-3.5 w-3.5" />
+            <Link href="/universities" className="transition-colors hover:text-[var(--accent)]">Universities</Link>
+            <ChevronRight className="h-3.5 w-3.5" />
+            <span className="truncate font-medium text-[#5B5B66]">{uni.shortName ?? uni.name}</span>
           </nav>
 
           {/* Identity row */}
-          <div className="flex flex-col gap-5 sm:flex-row sm:items-end">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
             {/* Logo */}
-            <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-3xl border-4 border-white bg-white shadow-xl sm:h-28 sm:w-28">
+            <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[var(--line)] bg-white shadow-sm">
               {uni.logoUrl ? (
                 <Image
                   src={uni.logoUrl}
                   alt={`${uni.name} logo`}
-                  width={112}
-                  height={112}
+                  width={96}
+                  height={96}
                   className="h-full w-full object-contain p-1"
                   unoptimized
                 />
               ) : (
-                <span className="bg-gradient-to-br from-[#4F46E5] to-[#7C3AED] bg-clip-text text-3xl font-extrabold text-transparent">
+                <span className="text-2xl font-extrabold text-[var(--accent)]">
                   {uni.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
                 </span>
               )}
             </div>
 
             {/* Name + meta */}
-            <div className="flex-1 pb-1 text-white">
+            <div className="flex-1">
               <div className="mb-2 flex flex-wrap items-center gap-2">
                 {uni.universityType && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white ring-1 ring-white/20 backdrop-blur-sm">
-                    <Building2 className="h-3 w-3" />
+                  <span className="inline-flex items-center gap-1 rounded-full border border-[var(--line)] bg-white px-3 py-1 text-xs font-semibold text-[#5B5B66]">
+                    <Building2 className="h-3 w-3 text-[var(--accent)]" />
                     {uni.universityType}
                   </span>
                 )}
                 {highlights.admissionOpen && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#10B981] px-3 py-1 text-xs font-bold text-white shadow-sm">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#ECFDF3] px-3 py-1 text-xs font-bold text-[#067647] ring-1 ring-[#ABEFC6]">
                     <span className="relative flex h-1.5 w-1.5">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
-                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#10B981] opacity-75" />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#10B981]" />
                     </span>
                     Admissions Open
                   </span>
                 )}
               </div>
-              <h1 className="text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl md:text-4xl">
+              <h1 className="text-2xl font-bold leading-tight tracking-tight text-[#15151A] sm:text-3xl md:text-4xl">
                 {uni.name}
               </h1>
               {location && (
-                <p className="mt-1.5 flex items-center gap-1.5 text-sm text-white/75">
+                <p className="mt-1.5 flex items-center gap-1.5 text-sm text-[#8A8A94]">
                   <MapPin className="h-4 w-4 shrink-0" />
                   {location}
                 </p>
               )}
             </div>
           </div>
+
+          {/* Highlights */}
+          {highlightItems.length > 0 && (
+            <div className="mt-6 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5">
+              {highlightItems.map(({ key, value }) => {
+                const meta = HIGHLIGHT_META[key];
+                return (
+                  <div
+                    key={key}
+                    className="flex items-center gap-2.5 rounded-xl border border-[var(--line)] bg-white px-3.5 py-2.5"
+                  >
+                    <span className="icon-tile flex h-9 w-9 shrink-0 items-center justify-center">
+                      <meta.Icon className="h-4 w-4" />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-medium uppercase tracking-wide text-[#8A8A94]">
+                        {meta.label}
+                      </p>
+                      <p className="truncate text-sm font-bold text-[#15151A]">{value}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
-
-      {/* ══════════════════════ HIGHLIGHTS ══════════════════════ */}
-      {highlightItems.length > 0 && (
-        <div className="container mx-auto mt-8 px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-            {highlightItems.map(({ key, value }) => {
-              const meta = HIGHLIGHT_META[key];
-              return (
-                <div
-                  key={key}
-                  className="flex items-center gap-3 rounded-2xl border border-[#ECE9FB] bg-white p-3.5 shadow-[0_1px_3px_rgba(79,70,229,0.05)]"
-                >
-                  <span
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-                    style={{ background: meta.bg, color: meta.color }}
-                  >
-                    <meta.Icon className="h-5 w-5" />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-[11px] font-medium uppercase tracking-wide text-[#AEAEB2]">
-                      {meta.label}
-                    </p>
-                    <p className="truncate text-sm font-bold text-[#1D1D1F]">{value}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
 
       {/* ══════════════════════ CONTENT + SIDEBAR ══════════════════════ */}
       <div className="container mx-auto mt-10 px-4 sm:px-6 lg:px-8 max-w-6xl mb-16">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Article */}
           <div className="lg:col-span-2">
-            <div className="rounded-3xl border border-[#ECE9FB] bg-white p-6 shadow-[0_1px_3px_rgba(79,70,229,0.05)] sm:p-8">
+            <div className="card-minimal p-6 sm:p-8">
               <div className="mb-6 flex items-center gap-2.5">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#4F46E5] to-[#7C3AED] text-white">
+                <span className="icon-tile flex h-9 w-9 items-center justify-center">
                   <GraduationCap className="h-5 w-5" />
                 </span>
-                <h2 className="text-lg font-extrabold text-[#1D1D1F]">
+                <h2 className="text-lg font-bold text-[#15151A]">
                   About {uni.shortName ?? uni.name}
                 </h2>
               </div>
@@ -240,8 +216,8 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
               {uni.content ? (
                 <Markdown>{uni.content}</Markdown>
               ) : (
-                <div className="rounded-2xl border border-dashed border-[#E0DBF7] bg-[#FAF9FF] p-10 text-center">
-                  <p className="text-sm text-[#9A98A3]">Detailed brochure coming soon.</p>
+                <div className="rounded-2xl border border-dashed border-[var(--line)] bg-[var(--surface-2)] p-10 text-center">
+                  <p className="text-sm text-[#8A8A94]">Detailed brochure coming soon.</p>
                 </div>
               )}
             </div>
@@ -250,10 +226,10 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
           {/* Sidebar */}
           <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
             {/* Enquiry */}
-            <div className="overflow-hidden rounded-3xl border border-[#ECE9FB] bg-white shadow-[0_4px_20px_rgba(79,70,229,0.08)]">
-              <div className="bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] px-5 py-4 text-white">
-                <h3 className="text-base font-bold">Get Free Counselling</h3>
-                <p className="mt-0.5 text-xs text-white/80">
+            <div className="card-minimal overflow-hidden">
+              <div className="border-b border-[var(--line)] bg-[var(--accent-soft)] px-5 py-4">
+                <h3 className="text-base font-bold text-[#15151A]">Get Free Counselling</h3>
+                <p className="mt-0.5 text-xs text-[#5B5B66]">
                   Talk to our experts about {uni.shortName ?? uni.name} admissions.
                 </p>
               </div>
@@ -272,33 +248,33 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
 
             {/* Quick info */}
             {(uni.website || uni.state || uni.universityType) && (
-              <div className="rounded-3xl border border-[#ECE9FB] bg-white p-5 shadow-[0_1px_3px_rgba(79,70,229,0.05)]">
-                <h4 className="mb-3 text-sm font-bold text-[#1D1D1F]">University Info</h4>
+              <div className="card-minimal p-5">
+                <h4 className="mb-3 text-sm font-bold text-[#15151A]">University Info</h4>
                 <dl className="space-y-2.5 text-sm">
                   {uni.universityType && (
                     <div className="flex items-center gap-2">
-                      <Building2 className="h-4 w-4 shrink-0 text-[#A78BFA]" />
-                      <dt className="w-16 shrink-0 text-[#AEAEB2]">Type</dt>
-                      <dd className="text-[#3A3A3C]">{uni.universityType}</dd>
+                      <Building2 className="h-4 w-4 shrink-0 text-[var(--accent)]" />
+                      <dt className="w-16 shrink-0 text-[#8A8A94]">Type</dt>
+                      <dd className="text-[#5B5B66]">{uni.universityType}</dd>
                     </div>
                   )}
                   {uni.state && (
                     <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4 shrink-0 text-[#A78BFA]" />
-                      <dt className="w-16 shrink-0 text-[#AEAEB2]">State</dt>
-                      <dd className="text-[#3A3A3C]">{uni.state}</dd>
+                      <MapPin className="h-4 w-4 shrink-0 text-[var(--accent)]" />
+                      <dt className="w-16 shrink-0 text-[#8A8A94]">State</dt>
+                      <dd className="text-[#5B5B66]">{uni.state}</dd>
                     </div>
                   )}
                   {uni.website && (
                     <div className="flex items-center gap-2">
-                      <Globe className="h-4 w-4 shrink-0 text-[#A78BFA]" />
-                      <dt className="w-16 shrink-0 text-[#AEAEB2]">Website</dt>
+                      <Globe className="h-4 w-4 shrink-0 text-[var(--accent)]" />
+                      <dt className="w-16 shrink-0 text-[#8A8A94]">Website</dt>
                       <dd className="min-w-0">
                         <a
                           href={uni.website}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="block truncate font-medium text-[#4F46E5] hover:underline"
+                          className="block truncate font-medium text-[var(--accent)] hover:underline"
                         >
                           {uni.website.replace(/^https?:\/\//, "")}
                         </a>
@@ -315,10 +291,10 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
       {/* ══════════════════════ GALLERY ══════════════════════ */}
       {uni.galleryImages && uni.galleryImages.length > 0 && (
         <div className="container mx-auto mb-16 px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <h2 className="mb-5 text-lg font-extrabold text-[#1D1D1F]">Campus Gallery</h2>
+          <h2 className="mb-5 text-lg font-bold text-[#15151A]">Campus Gallery</h2>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
             {uni.galleryImages.map((url, i) => (
-              <div key={i} className="relative aspect-video overflow-hidden rounded-2xl border border-[#ECE9FB] bg-[#F5F3FF]">
+              <div key={i} className="relative aspect-video overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--surface-2)]">
                 <Image
                   src={url}
                   alt={`${uni.name} gallery ${i + 1}`}
@@ -336,10 +312,10 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
       {uni.courses.length > 0 && (
         <div className="container mx-auto mb-20 px-4 sm:px-6 lg:px-8 max-w-6xl">
           <div className="mb-6 flex items-end justify-between gap-4">
-            <h2 className="text-lg font-extrabold text-[#1D1D1F] sm:text-xl">
+            <h2 className="text-lg font-bold text-[#15151A] sm:text-xl">
               Courses at {uni.shortName ?? uni.name}
             </h2>
-            <span className="shrink-0 rounded-full bg-[#F6F4FF] px-3 py-1 text-xs font-semibold text-[#7C3AED]">
+            <span className="shrink-0 rounded-full bg-[var(--accent-soft)] px-3 py-1 text-xs font-semibold text-[var(--accent)]">
               {uni.courses.length} programs
             </span>
           </div>
@@ -349,10 +325,10 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
               <Link
                 key={course.id}
                 href={`/universities/${uni.slug}/${course.slug}`}
-                className="university-card group flex flex-col overflow-hidden rounded-2xl border border-[#ECE9FB] bg-white shadow-[0_1px_3px_rgba(79,70,229,0.05)] transition-colors hover:border-[#C4B5FD]"
+                className="university-card group flex flex-col overflow-hidden rounded-2xl border border-[var(--line)] bg-white transition-all hover:border-[#DCDCE6] hover:shadow-[0_6px_24px_rgba(20,20,30,0.06)]"
               >
                 {course.bannerImage && (
-                  <div className="relative aspect-video overflow-hidden bg-[#F5F3FF]">
+                  <div className="relative aspect-video overflow-hidden bg-[var(--surface-2)]">
                     <Image
                       src={course.bannerImage}
                       alt={course.name}
@@ -364,17 +340,17 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
                 )}
                 <div className="flex flex-1 flex-col p-4">
                   <div className="mb-2 flex items-start justify-between gap-2">
-                    <h3 className="text-sm font-bold leading-snug text-[#1D1D1F] transition-colors group-hover:text-[#4F46E5]">
+                    <h3 className="text-sm font-bold leading-snug text-[#15151A] transition-colors group-hover:text-[var(--accent)]">
                       {course.name}
                     </h3>
                     {course.courseType && (
-                      <span className="shrink-0 rounded-md bg-[#EEF2FF] px-1.5 py-0.5 text-[10px] font-bold text-[#4F46E5]">
+                      <span className="shrink-0 rounded-md bg-[var(--accent-soft)] px-1.5 py-0.5 text-[10px] font-bold text-[var(--accent)]">
                         {course.courseType}
                       </span>
                     )}
                   </div>
                   <div className="mt-auto pt-3">
-                    <span className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#F6F4FF] py-2 text-xs font-bold text-[#4F46E5] transition-colors group-hover:bg-gradient-to-r group-hover:from-[#4F46E5] group-hover:to-[#7C3AED] group-hover:text-white">
+                    <span className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-[var(--accent-soft)] py-2 text-xs font-bold text-[var(--accent)] transition-colors group-hover:bg-[var(--accent)] group-hover:text-white">
                       View Course →
                     </span>
                   </div>

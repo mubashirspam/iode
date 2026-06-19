@@ -1,16 +1,29 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { MapPin, Mail, Phone, ArrowUpRight } from 'lucide-react';
+import { getUniversities, getCourses } from '@/lib/db/queries';
 
-export default function Footer() {
+export default async function Footer() {
   const currentYear = new Date().getFullYear();
+
+  // Dynamic link columns — keeps the footer fresh and adds internal links that
+  // help universities/courses get crawled and indexed (better SEO).
+  const [universities, courses] = await Promise.all([
+    getUniversities().catch(() => []),
+    getCourses().catch(() => []),
+  ]);
+
+  const topUniversities = universities.filter((u) => u.slug).slice(0, 6);
+  const popularCourses = courses
+    .filter((c) => c.slug && c.universitySlug)
+    .slice(0, 6);
 
   return (
     <footer className="bg-white border-t border-[#E5E5EA]">
-      {/* Main Footer */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-12">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-12 md:gap-10 mb-10">
           {/* Brand Col */}
-          <div className="col-span-2 md:col-span-1 space-y-4">
+          <div className="col-span-2 md:col-span-3 lg:col-span-3 space-y-4">
             <Link href="/">
               <Image
                 src="/logo.svg"
@@ -20,11 +33,13 @@ export default function Footer() {
                 className="h-[60px] w-auto object-contain"
               />
             </Link>
-            <p className="text-sm text-[#6E6E73] leading-relaxed max-w-[260px]">
-              Empowering students and working professionals across Kerala and India with quality university admissions and distance education.
+            <p className="text-sm text-[#6E6E73] leading-relaxed max-w-[280px]">
+              Empowering students and working professionals across Kerala and India with
+              quality university admissions and UGC-recognized distance &amp; online
+              education — guided end to end, from counselling to enrollment.
             </p>
             {/* Social Icons */}
-            <div className="flex items-center gap-3 pt-2">
+            <div className="flex items-center gap-3 pt-1">
               <a href="https://www.instagram.com/vidya.vasal" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-[#F5F5F7] hover:bg-[#E8F2FF] flex items-center justify-center text-[#6E6E73] hover:text-[#007AFF] transition-all" aria-label="Instagram">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
               </a>
@@ -37,47 +52,104 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Programs */}
-          <div>
-            <h4 className="text-[#1D1D1F] font-semibold text-sm mb-4">Programs</h4>
+          {/* Top Universities (dynamic) */}
+          <div className="lg:col-span-3">
+            <h4 className="text-[#1D1D1F] font-semibold text-sm mb-4">Top Universities</h4>
             <ul className="space-y-3 text-sm">
-              <li><Link href="/admissions" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">University Admissions</Link></li>
-              <li><Link href="/montessori" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">Montessori Counseling</Link></li>
-              <li><Link href="/courses" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">Explore Universities</Link></li>
-              <li><Link href="/courses" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">View All Courses</Link></li>
+              {topUniversities.map((u) => (
+                <li key={u.id}>
+                  <Link href={`/universities/${u.slug}`} className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">
+                    {u.shortName ?? u.name}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link href="/universities" className="inline-flex items-center gap-1 font-semibold text-[#4F46E5] hover:text-[#7C3AED] transition-colors">
+                  All universities
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Company */}
-          <div>
-            <h4 className="text-[#1D1D1F] font-semibold text-sm mb-4">Company</h4>
+          {/* Popular Courses (dynamic) */}
+          <div className="lg:col-span-3">
+            <h4 className="text-[#1D1D1F] font-semibold text-sm mb-4">Popular Courses</h4>
             <ul className="space-y-3 text-sm">
-              <li><Link href="/about" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">About Us</Link></li>
-              <li><Link href="/contact" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">Contact</Link></li>
-              <li><Link href="/blog" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">Blog</Link></li>
-              <li><Link href="/privacy-policy" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">Terms of Service</Link></li>
+              {popularCourses.map((c) => (
+                <li key={c.id}>
+                  <Link
+                    href={`/universities/${c.universitySlug}/${c.slug}`}
+                    className="text-[#6E6E73] hover:text-[#007AFF] transition-colors line-clamp-1"
+                  >
+                    {c.name}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link href="/courses" className="inline-flex items-center gap-1 font-semibold text-[#4F46E5] hover:text-[#7C3AED] transition-colors">
+                  Browse all courses
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Contact */}
-          <div>
-            <h4 className="text-[#1D1D1F] font-semibold text-sm mb-4">Connect</h4>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-start gap-2.5">
-                <svg className="w-4 h-4 text-[#7B61FF] mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                <span className="text-[#6E6E73]">Kerala, India</span>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <svg className="w-4 h-4 text-[#7B61FF] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                <a href="mailto:info@vidyavasal.com" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">info@vidyavasal.com</a>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <svg className="w-4 h-4 text-[#7B61FF] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                <a href="tel:+917034760995" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">+91 70347 60995</a>
-              </li>
-            </ul>
+          {/* Company + Connect */}
+          <div className="lg:col-span-3 grid grid-cols-2 gap-8">
+            <div>
+              <h4 className="text-[#1D1D1F] font-semibold text-sm mb-4">Company</h4>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="/about" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">About Us</Link></li>
+                <li><Link href="/admissions" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">Admissions</Link></li>
+                <li><Link href="/montessori" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">Montessori</Link></li>
+                <li><Link href="/blog" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">Blog</Link></li>
+                <li><Link href="/contact" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">Contact</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-[#1D1D1F] font-semibold text-sm mb-4">Connect</h4>
+              <ul className="space-y-3 text-sm">
+                <li className="flex items-start gap-2.5">
+                  <MapPin className="w-4 h-4 text-[#7B61FF] mt-0.5 shrink-0" />
+                  <span className="text-[#6E6E73]">Kerala, India</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Mail className="w-4 h-4 text-[#7B61FF] shrink-0" />
+                  <a href="mailto:info@vidyavasal.com" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">info@vidyavasal.com</a>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Phone className="w-4 h-4 text-[#7B61FF] shrink-0" />
+                  <a href="tel:+917034760995" className="text-[#6E6E73] hover:text-[#007AFF] transition-colors">+91 70347 60995</a>
+                </li>
+              </ul>
+            </div>
           </div>
+        </div>
+
+        {/* SEO content + popular searches */}
+        <div className="rounded-2xl border border-[#ECE9FB] bg-[#FAF9FF] p-5 sm:p-6 mb-10">
+          <p className="text-xs leading-relaxed text-[#8A8A8E]">
+            Vidyavasal is a trusted education consultancy helping students across Kerala
+            and India enroll in UGC-DEB recognized online and distance learning programs —
+            BBA, BCA, B.Com, MBA, MCA, M.Com and more — from leading universities such as
+            {topUniversities.length > 0 ? ` ${topUniversities.map((u) => u.shortName ?? u.name).join(", ")}` : " India's top institutions"}.
+            We offer free counselling, eligibility checks, scholarship guidance and end-to-end
+            admission support so you can study from anywhere and grow everywhere.
+          </p>
+          {popularCourses.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {popularCourses.map((c) => (
+                <Link
+                  key={`tag-${c.id}`}
+                  href={`/universities/${c.universitySlug}/${c.slug}`}
+                  className="rounded-full border border-[#E5E0F7] bg-white px-3 py-1 text-xs font-medium text-[#6E6E73] transition-colors hover:border-[#C4B5FD] hover:text-[#4F46E5]"
+                >
+                  {c.name}
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Bottom Bar */}

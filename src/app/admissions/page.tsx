@@ -69,37 +69,35 @@ export default function AdmissionsPage() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden hero-mesh-bg pt-12 pb-16 md:pt-20 md:pb-24">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-20 blob-1"
-          style={{background: 'radial-gradient(circle, #7B61FF, transparent)', transform: 'translate(30%, -40%)'}}></div>
+      <section className="border-b border-[var(--line)] bg-[var(--surface-2)] py-12 md:py-16">
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
           <div className="text-center">
-            <span className="section-label-purple mb-5 inline-flex">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+            <span className="eyebrow mb-4 inline-flex">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
               University Admissions 2026
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1D1D1F] mt-3 mb-6 leading-tight">
-              Get Admitted to Your{' '}
-              <span className="gradient-text-purple">Dream University</span>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#15151A] mt-3 mb-5 leading-tight">
+              Get admitted to your{' '}
+              <span className="text-accent">dream university</span>
             </h1>
-            <p className="text-lg md:text-xl text-[#6E6E73] max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p className="text-[15px] md:text-base text-[#5B5B66] max-w-2xl mx-auto mb-8 leading-relaxed">
               Expert admission guidance for 25+ UGC-recognized universities across India.
               UG, PG, MBA, and Diploma programs — all in one place.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link href="/contact" className="px-8 py-4 rounded-full btn-gradient text-white font-bold text-base btn-press flex items-center justify-center gap-2">
+              <Link href="/contact" className="btn-primary btn-press px-7 py-3.5 rounded-full font-semibold flex items-center justify-center gap-2">
                 Start Free Consultation
-                <svg className="w-5 h-5 cta-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                <svg className="w-4 h-4 cta-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
               </Link>
-              <Link href="/courses" className="px-8 py-4 rounded-full bg-white border border-[#E5E5EA] text-[#1D1D1F] font-bold text-base hover:bg-[#F5F5F7] transition-all flex items-center justify-center gap-2">
+              <Link href="/courses" className="btn-outline btn-press px-7 py-3.5 rounded-full font-semibold flex items-center justify-center gap-2">
                 Browse 120+ Courses
               </Link>
             </div>
 
             {/* Trust chips */}
-            <div className="flex flex-wrap justify-center gap-3 mt-10">
+            <div className="flex flex-wrap justify-center gap-2.5 mt-8">
               {['UGC Recognized', 'Free Counseling', 'Quick Admission', 'EMI Available', '5,000+ Students'].map((chip) => (
-                <span key={chip} className="glass-card px-4 py-2 rounded-full text-sm font-medium text-[#1D1D1F] flex items-center gap-2">
+                <span key={chip} className="border border-[var(--line)] bg-white px-3.5 py-1.5 rounded-full text-sm font-medium text-[#5B5B66] flex items-center gap-2">
                   <svg className="w-3.5 h-3.5 text-[#34C759]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>
                   {chip}
                 </span>
@@ -110,10 +108,10 @@ export default function AdmissionsPage() {
       </section>
 
       {/* Program Categories */}
-      <section className="py-20 md:py-28 bg-white">
+      <section className="section-y bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <span className="section-label mb-4 inline-flex">Program Types</span>
+            <span className="eyebrow mb-4 inline-flex">Program Types</span>
             <h2 className="text-3xl md:text-4xl font-bold text-[#1D1D1F] mt-3">What we help you get into</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -143,10 +141,10 @@ export default function AdmissionsPage() {
       </section>
 
       {/* Partner Universities */}
-      <section className="py-20 md:py-24 section-mesh-bg">
+      <section className="section-y bg-[var(--surface-2)]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <span className="section-label-purple mb-4 inline-flex">Partner Network</span>
+            <span className="eyebrow mb-4 inline-flex">Partner Network</span>
             <h2 className="text-3xl md:text-4xl font-bold text-[#1D1D1F] mt-3">Universities we work with</h2>
             <p className="text-[#6E6E73] mt-3 max-w-lg mx-auto">All universities are UGC-recognized with DEB-approved distance education programs.</p>
           </div>
@@ -174,10 +172,10 @@ export default function AdmissionsPage() {
       </section>
 
       {/* Admission Process */}
-      <section className="py-20 md:py-28 bg-white">
+      <section className="section-y bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
           <div className="text-center mb-14">
-            <span className="section-label mb-4 inline-flex">Step by Step</span>
+            <span className="eyebrow mb-4 inline-flex">Step by Step</span>
             <h2 className="text-3xl md:text-4xl font-bold text-[#1D1D1F] mt-3">How the admission process works</h2>
           </div>
           <div className="relative">
@@ -185,7 +183,7 @@ export default function AdmissionsPage() {
             <div className="space-y-6">
               {steps.map((s) => (
                 <div key={s.num} className="flex gap-6 items-start">
-                  <div className="w-16 h-16 rounded-2xl btn-gradient flex items-center justify-center text-white font-bold text-sm shadow-lg shrink-0 z-10 relative">
+                  <div className="w-16 h-16 rounded-2xl btn-primary flex items-center justify-center text-white font-bold text-sm shrink-0 z-10 relative">
                     {s.num}
                   </div>
                   <div className="bg-white rounded-2xl p-5 border border-[#E5E5EA] flex-1 card-hover">

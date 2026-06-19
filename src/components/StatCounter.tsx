@@ -9,9 +9,11 @@ interface StatCounterProps {
   label: string;
   duration?: number;
   className?: string;
+  /** 'light' (default) for light backgrounds, 'dark' for dark bands. */
+  variant?: 'light' | 'dark';
 }
 
-export function StatCounter({ target, suffix = '', prefix = '', label, duration = 2000, className = '' }: StatCounterProps) {
+export function StatCounter({ target, suffix = '', prefix = '', label, duration = 2000, className = '', variant = 'light' }: StatCounterProps) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const animated = useRef(false);
@@ -41,10 +43,10 @@ export function StatCounter({ target, suffix = '', prefix = '', label, duration 
 
   return (
     <div ref={ref} className={`text-center ${className}`}>
-      <div className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-none">
+      <div className={`text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight leading-none ${variant === 'dark' ? 'text-white' : 'text-[#15151A]'}`}>
         {prefix}{count.toLocaleString()}{suffix}
       </div>
-      <p className="text-white/60 text-sm font-medium mt-2">{label}</p>
+      <p className={`text-sm font-medium mt-2 ${variant === 'dark' ? 'text-white/60' : 'text-[#8A8A94]'}`}>{label}</p>
     </div>
   );
 }

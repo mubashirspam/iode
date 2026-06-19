@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { MapPin } from "lucide-react";
+import { MapPin, ChevronRight, GraduationCap } from "lucide-react";
 import { getUniversities } from "@/lib/db/queries";
 import JsonLd from "@/components/JsonLd";
 import { itemListLd, breadcrumbLd } from "@/lib/seo/jsonld";
@@ -38,45 +38,68 @@ export default async function UniversitiesPage() {
         ]}
       />
 
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-50 to-indigo-50 py-14 px-4">
-        <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
-            Top Universities for Online & Distance Education
+      {/* ══════════════════════ HERO (light, minimal) ══════════════════════ */}
+      <section className="border-b border-[var(--line)] bg-[var(--surface-2)]">
+        <div className="container mx-auto max-w-6xl px-4 py-10 sm:px-6 md:py-12 lg:px-8">
+          <nav className="mb-5 flex items-center gap-1.5 text-sm text-[#8A8A94]">
+            <Link href="/" className="transition-colors hover:text-[var(--accent)]">Home</Link>
+            <ChevronRight className="h-3.5 w-3.5" />
+            <span className="font-medium text-[#5B5B66]">Universities</span>
+          </nav>
+          <span className="eyebrow mb-4">
+            <GraduationCap className="h-3.5 w-3.5" />
+            UGC-Recognized Partners
+          </span>
+          <h1 className="max-w-3xl text-3xl font-bold leading-tight tracking-tight text-[#15151A] sm:text-4xl">
+            Top universities for <span className="text-accent">online &amp; distance</span> education
           </h1>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            UGC-approved programs from India&apos;s leading universities. Compare courses, fees, and apply through Vidyavasal.
+          <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-[#5B5B66] md:text-base">
+            Explore India&apos;s leading universities, compare courses and apply with end-to-end
+            admission support from Vidyavasal.
           </p>
+
+          <div className="mt-6 flex flex-wrap gap-2.5">
+            {[
+              { value: `${universities.length}+`, label: "Universities" },
+              { value: `${universities.reduce((n, u) => n + Number(u.courseCount ?? 0), 0)}+`, label: "Courses" },
+              { value: "UGC", label: "Approved" },
+            ].map((s) => (
+              <div key={s.label} className="flex items-baseline gap-1.5 rounded-xl border border-[var(--line)] bg-white px-4 py-2.5">
+                <span className="text-lg font-bold text-[#15151A]">{s.value}</span>
+                <span className="text-xs text-[#8A8A94]">{s.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Grid */}
-      <section className="max-w-6xl mx-auto px-4 py-12">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 section-y">
         <div className="flex items-center justify-between mb-6">
-          <p className="text-sm text-gray-500">{universities.length} universities</p>
+          <p className="text-sm text-[#8A8A94]">{universities.length} universities</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {universities.map((uni) => (
             <Link
               key={uni.id}
               href={`/universities/${uni.slug}`}
-              className="group bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+              className="card-minimal group overflow-hidden"
             >
               {/* Banner */}
-              <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-blue-100 to-indigo-100">
+              <div className="relative aspect-video overflow-hidden bg-[var(--surface-2)]">
                 <Image
                   src={uni.bannerImage || PLACEHOLDER}
                   alt={uni.name}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   unoptimized={!uni.bannerImage}
                 />
                 {/* Type badge */}
                 {uni.universityType && (
                   <div className="absolute top-3 left-3">
-                    <span className="px-2 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full">
+                    <span className="rounded-full bg-white/90 px-2 py-1 text-xs font-medium text-[#5B5B66] backdrop-blur-sm">
                       {uni.universityType}
                     </span>
                   </div>
@@ -85,20 +108,20 @@ export default async function UniversitiesPage() {
 
               {/* Content */}
               <div className="p-4">
-                <h2 className="font-bold text-gray-900 text-base leading-snug mb-1 group-hover:text-blue-700 transition-colors">
+                <h2 className="mb-1 text-base font-bold leading-snug text-[#15151A] transition-colors group-hover:text-[var(--accent)]">
                   {uni.name}
                 </h2>
                 {(uni.city || uni.state) && (
-                  <p className="text-sm text-gray-500 mb-3 flex items-center gap-1">
+                  <p className="mb-3 flex items-center gap-1 text-sm text-[#8A8A94]">
                     <MapPin className="w-3.5 h-3.5 shrink-0" />
                     {[uni.city, uni.state].filter(Boolean).join(", ")}
                   </p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-blue-700 bg-blue-50 px-2 py-1 rounded-full">
+                  <span className="rounded-full bg-[var(--accent-soft)] px-2 py-1 text-xs font-medium text-[var(--accent)]">
                     {uni.courseCount} Courses
                   </span>
-                  <span className="text-xs text-blue-600 font-medium group-hover:underline">
+                  <span className="text-xs font-semibold text-[var(--accent)] group-hover:underline">
                     View Details →
                   </span>
                 </div>

@@ -125,78 +125,47 @@ export default function AboutPage() {
   return (
     <div>
       {/* ══════════════════════ HERO ══════════════════════ */}
-      <section className="relative overflow-hidden hero-vivid-bg pt-20 pb-20 md:pt-28 md:pb-28">
-        <div
-          className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-20 blob-1 pointer-events-none"
-          style={{
-            background: "radial-gradient(circle, #4F46E5, transparent)",
-            transform: "translate(30%, -40%)",
-          }}
-        />
-        <div
-          className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full opacity-15 blob-2 pointer-events-none"
-          style={{
-            background: "radial-gradient(circle, #0EA5E9, transparent)",
-            transform: "translate(-25%, 30%)",
-          }}
-        />
-
+      <section className="border-b border-[var(--line)] bg-[var(--surface-2)] py-12 md:py-16">
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center">
           <ScrollReveal>
-            <span className="section-label-purple mb-5 inline-flex">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span className="eyebrow mb-4">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               About Vidyavasal
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1D1D1F] mt-3 mb-6 leading-tight">
-              Empowering futures through
-              <br className="hidden md:block" />
-              <span className="gradient-text-vivid">quality education</span>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#15151A] mt-3 mb-5 leading-tight">
+              Empowering futures through{" "}
+              <span className="text-accent">quality education</span>
             </h1>
-            <p className="text-lg text-[#6E6E73] max-w-2xl mx-auto leading-relaxed">
-              Vidyavasal is Kerala&apos;s leading admission and
-              education consultancy, connecting students with the best universities and
-              programs across India since 2016.
+            <p className="text-[15px] md:text-base text-[#5B5B66] max-w-2xl mx-auto leading-relaxed">
+              Vidyavasal is Kerala&apos;s leading admission and education consultancy,
+              connecting students with the best universities and programs across India since 2016.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center mt-10">
-              <Link
-                href="/contact"
-                className="px-8 py-4 rounded-full btn-gradient-vivid text-white font-semibold btn-press flex items-center justify-center gap-2"
-              >
+            <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
+              <Link href="/contact" className="btn-primary btn-press px-7 py-3.5 rounded-full font-semibold flex items-center justify-center gap-2">
                 Talk to a Counselor
-                <svg className="w-5 h-5 cta-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 cta-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
-              <Link
-                href="/courses"
-                className="px-8 py-4 rounded-full bg-white border border-[#E5E5EA] text-[#1D1D1F] font-semibold hover:border-[#7C3AED] hover:text-[#7C3AED] hover:bg-[#F5F3FF] transition-all flex items-center justify-center gap-2"
-              >
+              <Link href="/courses" className="btn-outline btn-press px-7 py-3.5 rounded-full font-semibold flex items-center justify-center gap-2">
                 Browse Courses
               </Link>
             </div>
           </ScrollReveal>
 
-          {/* Decorative stat strip */}
-          <ScrollReveal delay={200} className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+          {/* Stat strip */}
+          <ScrollReveal delay={150} className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto">
             {[
-              { value: "2016", label: "Founded", color: "#4F46E5" },
-              { value: "5K+", label: "Students", color: "#0EA5E9" },
-              { value: "25+", label: "Universities", color: "#10B981" },
-              { value: "8+", label: "Years", color: "#F59E0B" },
+              { value: "2016", label: "Founded" },
+              { value: "5K+", label: "Students" },
+              { value: "25+", label: "Universities" },
+              { value: "8+", label: "Years" },
             ].map((s) => (
-              <div
-                key={s.label}
-                className="bg-white/80 backdrop-blur-sm rounded-2xl border border-white/90 shadow-sm p-4 text-center"
-              >
-                <p
-                  className="text-2xl font-extrabold leading-none"
-                  style={{ color: s.color }}
-                >
-                  {s.value}
-                </p>
-                <p className="text-xs text-[#6E6E73] mt-1 font-medium">{s.label}</p>
+              <div key={s.label} className="rounded-xl border border-[var(--line)] bg-white p-4 text-center">
+                <p className="text-2xl font-extrabold leading-none text-[#15151A]">{s.value}</p>
+                <p className="text-xs text-[#8A8A94] mt-1 font-medium">{s.label}</p>
               </div>
             ))}
           </ScrollReveal>
@@ -208,20 +177,20 @@ export default function AboutPage() {
         <div className="absolute inset-0 dot-pattern opacity-10 pointer-events-none" />
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-4xl mx-auto">
-            <StatCounter target={5000} suffix="+" label="Students Enrolled" />
-            <StatCounter target={3500} suffix="+" label="Admissions Done" />
-            <StatCounter target={25} suffix="+" label="Partner Universities" />
-            <StatCounter target={120} suffix="+" label="Courses Available" />
-            <StatCounter target={8} suffix="+" label="Years of Excellence" className="col-span-2 md:col-span-1" />
+            <StatCounter variant="dark" target={5000} suffix="+" label="Students Enrolled" />
+            <StatCounter variant="dark" target={3500} suffix="+" label="Admissions Done" />
+            <StatCounter variant="dark" target={25} suffix="+" label="Partner Universities" />
+            <StatCounter variant="dark" target={120} suffix="+" label="Courses Available" />
+            <StatCounter variant="dark" target={8} suffix="+" label="Years of Excellence" className="col-span-2 md:col-span-1" />
           </div>
         </div>
       </section>
 
       {/* ══════════════════════ MISSION & VISION ══════════════════════ */}
-      <section className="py-20 md:py-28 bg-white">
+      <section className="section-y bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
           <ScrollReveal className="text-center mb-12">
-            <span className="section-label mb-4 inline-flex">Our Foundation</span>
+            <span className="eyebrow mb-4 inline-flex">Our Foundation</span>
             <h2 className="text-3xl md:text-4xl font-bold text-[#1D1D1F] mt-3">
               Mission &amp; Vision
             </h2>
@@ -281,7 +250,7 @@ export default function AboutPage() {
                   </div>
                   <span className="text-xs font-bold text-[#0EA5E9] tracking-widest uppercase mb-2 block">Our Vision</span>
                   <h3 className="text-2xl font-bold text-[#1D1D1F] mb-4">
-                    India's Most Trusted Education Consultancy
+                    India&apos;s Most Trusted Education Consultancy
                   </h3>
                   <p className="text-[#6E6E73] leading-relaxed">
                     To be India&apos;s most trusted education consultancy, known for connecting students
@@ -303,10 +272,10 @@ export default function AboutPage() {
       </section>
 
       {/* ══════════════════════ CORE VALUES ══════════════════════ */}
-      <section className="py-20 md:py-28 section-mesh-bg">
+      <section className="section-y bg-[var(--surface-2)]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
           <ScrollReveal className="text-center mb-12">
-            <span className="section-label-purple mb-4 inline-flex">Core Values</span>
+            <span className="eyebrow mb-4 inline-flex">Core Values</span>
             <h2 className="text-3xl md:text-4xl font-bold text-[#1D1D1F] mt-3">
               What drives us every day
             </h2>
@@ -337,10 +306,10 @@ export default function AboutPage() {
       </section>
 
       {/* ══════════════════════ TIMELINE ══════════════════════ */}
-      <section className="py-20 md:py-28 bg-white">
+      <section className="section-y bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
           <ScrollReveal className="text-center mb-12">
-            <span className="section-label mb-4 inline-flex">Our Journey</span>
+            <span className="eyebrow mb-4 inline-flex">Our Journey</span>
             <h2 className="text-3xl md:text-4xl font-bold text-[#1D1D1F] mt-3">
               Milestones &amp; Growth
             </h2>
@@ -391,10 +360,10 @@ export default function AboutPage() {
       </section>
 
       {/* ══════════════════════ TEAM ══════════════════════ */}
-      <section className="py-20 md:py-28 hero-mesh-bg">
+      <section className="section-y bg-[var(--surface-2)]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
           <ScrollReveal className="text-center mb-12">
-            <span className="section-label-purple mb-4 inline-flex">Our Teams</span>
+            <span className="eyebrow mb-4 inline-flex">Our Teams</span>
             <h2 className="text-3xl md:text-4xl font-bold text-[#1D1D1F] mt-3">
               Experts who care about your success
             </h2>

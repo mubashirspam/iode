@@ -76,7 +76,7 @@ function FilterSelect({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full appearance-none rounded-xl border border-[#E5E0F7] bg-white py-3 pl-10 pr-9 text-sm font-medium text-[#1D1D1F] transition-colors focus:border-[#7C3AED] focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/20"
+        className="w-full appearance-none rounded-xl border border-[var(--line)] bg-white py-3 pl-10 pr-9 text-sm font-medium text-[#1D1D1F] transition-colors focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/15"
       >
         {children}
       </select>
@@ -154,7 +154,7 @@ export function CoursesDashboard({ courses, initialQuery = '' }: Props) {
       {/* ── Search + Filters (sticks below the header, rises to top when it hides) ── */}
       <div
         style={{ top: headerHidden ? 8 : 84 }}
-        className="sticky z-40 border-y border-[#ECE9FB] bg-white/85 py-3.5 backdrop-blur-xl transition-[top] duration-300 ease-out"
+        className="sticky z-40 border-y border-[var(--line)] bg-white/85 py-3.5 backdrop-blur-xl transition-[top] duration-300 ease-out"
       >
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
@@ -166,7 +166,7 @@ export function CoursesDashboard({ courses, initialQuery = '' }: Props) {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search course or university…"
-                className="w-full rounded-xl border border-[#E5E0F7] bg-white py-3 pl-11 pr-4 text-sm text-[#1D1D1F] placeholder:text-[#AEAEB2] focus:border-[#7C3AED] focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/20"
+                className="w-full rounded-xl border border-[var(--line)] bg-white py-3 pl-11 pr-4 text-sm text-[#1D1D1F] placeholder:text-[#AEAEB2] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/15"
               />
             </div>
 
@@ -238,7 +238,7 @@ export function CoursesDashboard({ courses, initialQuery = '' }: Props) {
                 <Link
                   href={href}
                   key={course.id}
-                  className="university-card group flex flex-col overflow-hidden rounded-2xl border border-[#ECE9FB] bg-white shadow-[0_1px_3px_rgba(79,70,229,0.06)] transition-colors hover:border-[#C4B5FD]"
+                  className="university-card group flex flex-col overflow-hidden rounded-2xl border border-[var(--line)] bg-white transition-all hover:border-[#DCDCE6] hover:shadow-[0_6px_24px_rgba(20,20,30,0.06)]"
                 >
                   {/* ── Image (16:9) ── */}
                   <div className="relative aspect-video w-full overflow-hidden bg-[#F5F3FF]">
@@ -294,7 +294,7 @@ export function CoursesDashboard({ courses, initialQuery = '' }: Props) {
 
                     {/* Footer */}
                     <div className="mt-auto border-t border-[#F1EEFC] pt-3 sm:pt-4">
-                      <span className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#F6F4FF] py-2.5 text-xs font-bold text-[#4F46E5] transition-colors group-hover:bg-gradient-to-r group-hover:from-[#4F46E5] group-hover:to-[#7C3AED] group-hover:text-white sm:text-sm">
+                      <span className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-[var(--accent-soft)] py-2.5 text-xs font-bold text-[var(--accent)] transition-colors group-hover:bg-[var(--accent)] group-hover:text-white sm:text-sm">
                         View Details
                         <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 sm:h-4 sm:w-4" />
                       </span>

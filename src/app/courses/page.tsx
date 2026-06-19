@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { CoursesDashboard } from "@/components/CoursesDashboard";
 import { getCourses, getAdminStats } from "@/lib/db/queries";
 import Link from "next/link";
-import Image from "next/image";
+import { Search } from "lucide-react";
 import JsonLd from "@/components/JsonLd";
 import { itemListLd, breadcrumbLd } from "@/lib/seo/jsonld";
 
@@ -43,83 +43,37 @@ export default async function CoursesPage() {
           ]),
         ]}
       />
-      {/* ── Header ── */}
-      <section className="relative overflow-hidden pt-28 pb-10 md:pt-32 md:pb-14" style={{ background: "linear-gradient(135deg, #1a0a3e 0%, #2b1066 45%, #0f1e54 100%)" }}>
-        {/* Decorative pattern + orbs */}
-        <div className="absolute inset-0 dot-pattern opacity-10 pointer-events-none" />
-        <div
-          className="absolute -top-20 -right-16 w-96 h-96 rounded-full blur-3xl opacity-25 pointer-events-none"
-          style={{ background: "radial-gradient(circle, #7C3AED, transparent)" }}
-        />
-        <div
-          className="absolute bottom-0 left-0 w-80 h-80 rounded-full blur-3xl opacity-20 pointer-events-none"
-          style={{ background: "radial-gradient(circle, #0EA5E9, transparent)" }}
-        />
+      {/* ── Header (light, minimal) ── */}
+      <section className="border-b border-[var(--line)] bg-[var(--surface-2)]">
+        <div className="container mx-auto max-w-7xl px-4 py-10 sm:px-6 md:py-12 lg:px-8">
+          <nav className="mb-5 flex items-center gap-1.5 text-sm text-[#8A8A94]">
+            <Link href="/" className="transition-colors hover:text-[var(--accent)]">Home</Link>
+            <span>/</span>
+            <span className="font-medium text-[#5B5B66]">Courses</span>
+          </nav>
+          <span className="eyebrow mb-4">
+            <Search className="h-3.5 w-3.5" />
+            Course Explorer
+          </span>
+          <h1 className="max-w-2xl text-3xl font-bold leading-tight tracking-tight text-[#15151A] sm:text-4xl">
+            Find your <span className="text-accent">perfect course</span>
+          </h1>
+          <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-[#5B5B66] md:text-base">
+            {stats.courses}+ programs from {stats.universities}+ UGC-recognized universities.
+            Search and filter by university and program level to find what fits you.
+          </p>
 
-        <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
-            {/* Copy */}
-            <div className="max-w-2xl">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white/85 text-[0.8125rem] font-bold uppercase tracking-[0.06em] border border-white/15 mb-5">
-                <svg className="w-4 h-4 text-[#A78BFA]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                Course Explorer
-              </span>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-[1.05] tracking-tight">
-                Find Your{" "}
-                <span className="gradient-text-vivid">Perfect Course</span>
-              </h1>
-              <p className="text-white/65 mt-5 text-base md:text-lg max-w-xl leading-relaxed">
-                {stats.courses}+ programs from {stats.universities}+ UGC-recognized
-                universities. Search and filter by university and program level to
-                find what fits you.
-              </p>
-
-              {/* Stats row */}
-              <div className="mt-8 flex flex-wrap gap-3">
-                {[
-                  { value: `${stats.courses}+`, label: "Courses", color: "#A78BFA" },
-                  { value: `${stats.universities}+`, label: "Universities", color: "#5AC8FA" },
-                  { value: "UGC", label: "Approved", color: "#34C759" },
-                ].map((s) => (
-                  <div
-                    key={s.label}
-                    className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 backdrop-blur-sm"
-                  >
-                    <p className="text-2xl font-extrabold" style={{ color: s.color }}>{s.value}</p>
-                    <p className="mt-0.5 text-xs text-white/60">{s.label}</p>
-                  </div>
-                ))}
+          <div className="mt-6 flex flex-wrap gap-2.5">
+            {[
+              { value: `${stats.courses}+`, label: "Courses" },
+              { value: `${stats.universities}+`, label: "Universities" },
+              { value: "UGC", label: "Approved" },
+            ].map((s) => (
+              <div key={s.label} className="flex items-baseline gap-1.5 rounded-xl border border-[var(--line)] bg-white px-4 py-2.5">
+                <span className="text-lg font-bold text-[#15151A]">{s.value}</span>
+                <span className="text-xs text-[#8A8A94]">{s.label}</span>
               </div>
-            </div>
-
-            {/* Image */}
-            <div className="relative hidden lg:block w-[360px] shrink-0">
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[1.75rem] border-4 border-white/10 shadow-2xl shadow-black/30">
-                <Image
-                  src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80"
-                  alt="Students exploring online courses"
-                  fill
-                  sizes="360px"
-                  className="object-cover"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1a0a3e]/50 via-transparent to-transparent" />
-              </div>
-              {/* Floating badge */}
-              <div className="absolute -bottom-4 -left-4 flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-xl">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#4F46E5] to-[#7C3AED] text-white">
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                </span>
-                <div>
-                  <p className="text-sm font-extrabold leading-none text-[#1D1D1F]">100% UGC Valid</p>
-                  <p className="mt-1 text-xs text-[#6E6E73]">Degrees across India</p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -128,19 +82,19 @@ export default async function CoursesPage() {
       <CoursesDashboard courses={courses} />
 
       {/* ── CTA ── */}
-      <section className="py-12 md:py-16 bg-white border-t border-[#E5E5EA]">
+      <section className="section-y bg-white border-t border-[var(--line)]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl text-center">
-          <h2 className="text-2xl font-bold text-[#1D1D1F] mb-3">
+          <h2 className="text-2xl font-bold text-[#15151A] mb-3">
             Can&apos;t find what you&apos;re looking for?
           </h2>
-          <p className="text-[#6E6E73] mb-6">
+          <p className="text-[#5B5B66] mb-6">
             Talk to our counselors — we&apos;ll match you with the perfect
             program from our full catalog.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/contact"
-              className="px-7 py-3.5 rounded-full btn-gradient text-white font-semibold btn-press flex items-center justify-center gap-2"
+              className="btn-primary btn-press px-7 py-3.5 rounded-full font-semibold flex items-center justify-center gap-2"
             >
               Get Personalized Advice
               <svg
@@ -161,7 +115,7 @@ export default async function CoursesPage() {
               href="https://wa.me/917034760995"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-7 py-3.5 rounded-full bg-[#F5F5F7] text-[#1D1D1F] font-semibold hover:bg-[#E8F2FF] hover:text-[#007AFF] transition-colors flex items-center justify-center gap-2"
+              className="btn-outline btn-press px-7 py-3.5 rounded-full font-semibold flex items-center justify-center gap-2"
             >
               <svg
                 className="w-4 h-4"
