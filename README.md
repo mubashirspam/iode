@@ -224,3 +224,17 @@ iode/
 npm run build
 npm run start
 ```
+
+
+
+
+
+ ## Contact
+
+  - 📞 **Phone:** [+91 70347 60995](tel:+917034760995)
+  - 💬 **WhatsApp:** [+91 70347 60995](https://wa.me/917034760995)
+  - ✉️  **Email:** [info@vidyavasal.com](mailto:info@vidyavasal.com)
+  - 📍 **Location:** Kerala, India
+  - 🌐 **Website:** [vidyavasal.com](https://vidyavasal.com/)
+
+  **Social:** [Instagram](https://www.instagram.com/vidya.vasal) · [Facebook](https://www.facebook.com/vidyavasal)
