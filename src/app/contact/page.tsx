@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import Link from "next/link";
+import { submitContactForm } from "@/lib/actions/leads";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -70,21 +70,22 @@ export default function ContactPage() {
             {/* Contact Form */}
             <div className="bg-white rounded-2xl p-8 border border-[#E5E5EA] shadow-sm">
               <h2 className="text-2xl font-bold mb-6 text-[#1D1D1F]">Send us a Message</h2>
-              <form className="space-y-5" action="/thank-you">
+              <form className="space-y-5" action={submitContactForm}>
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-[#1D1D1F] mb-1.5">Full Name</label>
-                  <input type="text" id="name" required className="w-full px-4 py-3 rounded-xl border border-[#E5E5EA] bg-white text-[#1D1D1F] focus:ring-2 focus:ring-[#007AFF]/15 focus:border-[#007AFF] outline-none transition-all placeholder:text-[#AEAEB2]" placeholder="John Doe" />
+                  <input type="text" id="name" name="name" required className="w-full px-4 py-3 rounded-xl border border-[#E5E5EA] bg-white text-[#1D1D1F] focus:ring-2 focus:ring-[#007AFF]/15 focus:border-[#007AFF] outline-none transition-all placeholder:text-[#AEAEB2]" placeholder="John Doe" />
                 </div>
 
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-[#1D1D1F] mb-1.5">Phone Number (WhatsApp)</label>
-                  <input type="tel" id="phone" required className="w-full px-4 py-3 rounded-xl border border-[#E5E5EA] bg-white text-[#1D1D1F] focus:ring-2 focus:ring-[#007AFF]/15 focus:border-[#007AFF] outline-none transition-all placeholder:text-[#AEAEB2]" placeholder="+91 XXXXX XXXXX" />
+                  <input type="tel" id="phone" name="phone" required className="w-full px-4 py-3 rounded-xl border border-[#E5E5EA] bg-white text-[#1D1D1F] focus:ring-2 focus:ring-[#007AFF]/15 focus:border-[#007AFF] outline-none transition-all placeholder:text-[#AEAEB2]" placeholder="+91 XXXXX XXXXX" />
                 </div>
 
                 <div>
                   <label htmlFor="course" className="block text-sm font-medium text-[#1D1D1F] mb-1.5">Interested Course</label>
-                  <select id="course" className="w-full px-4 py-3 rounded-xl border border-[#E5E5EA] bg-white text-[#1D1D1F] focus:ring-2 focus:ring-[#007AFF]/15 focus:border-[#007AFF] outline-none transition-all">
+                  <select id="course" name="course" className="w-full px-4 py-3 rounded-xl border border-[#E5E5EA] bg-white text-[#1D1D1F] focus:ring-2 focus:ring-[#007AFF]/15 focus:border-[#007AFF] outline-none transition-all">
                     <option value="">Select a program...</option>
+                    <option value="online-degree">Online University Degree (MBA, BBA, BCA…)</option>
                     <option value="iits">IITS Distance Education</option>
                     <option value="eduthalim">Eduthalim Degree/10th/12th</option>
                     <option value="montessori">Montessori Counseling</option>
@@ -94,7 +95,7 @@ export default function ContactPage() {
 
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-[#1D1D1F] mb-1.5">Message</label>
-                  <textarea id="message" rows={4} className="w-full px-4 py-3 rounded-xl border border-[#E5E5EA] bg-white text-[#1D1D1F] focus:ring-2 focus:ring-[#007AFF]/15 focus:border-[#007AFF] outline-none transition-all resize-none placeholder:text-[#AEAEB2]" placeholder="How can we help you?"></textarea>
+                  <textarea id="message" name="message" rows={4} className="w-full px-4 py-3 rounded-xl border border-[#E5E5EA] bg-white text-[#1D1D1F] focus:ring-2 focus:ring-[#007AFF]/15 focus:border-[#007AFF] outline-none transition-all resize-none placeholder:text-[#AEAEB2]" placeholder="How can we help you?"></textarea>
                 </div>
 
                 <button type="submit" className="w-full bg-[#007AFF] text-white font-semibold py-4 rounded-xl hover:bg-[#0066D6] transition-colors shadow-md shadow-[#007AFF]/20 btn-press">
