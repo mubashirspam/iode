@@ -39,7 +39,7 @@ export default async function UniversitiesPage() {
       />
 
       {/* ══════════════════════ HERO (light, minimal) ══════════════════════ */}
-      <section className="border-b border-[var(--line)] bg-[var(--surface-2)]">
+      <section className="border-b border-[var(--line)] bg-[#F5F5F7]">
         <div className="container mx-auto max-w-6xl px-4 py-10 sm:px-6 md:py-12 lg:px-8">
           <nav className="mb-5 flex items-center gap-1.5 text-sm text-[#8A8A94]">
             <Link href="/" className="transition-colors hover:text-[var(--accent)]">Home</Link>

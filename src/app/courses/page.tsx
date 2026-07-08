@@ -44,7 +44,7 @@ export default async function CoursesPage() {
         ]}
       />
       {/* ── Header (light, minimal) ── */}
-      <section className="border-b border-[var(--line)] bg-[var(--surface-2)]">
+      <section className="border-b border-[var(--line)] bg-[#F5F5F7]">
         <div className="container mx-auto max-w-7xl px-4 py-10 sm:px-6 md:py-12 lg:px-8">
           <nav className="mb-5 flex items-center gap-1.5 text-sm text-[#8A8A94]">
             <Link href="/" className="transition-colors hover:text-[var(--accent)]">Home</Link>
@@ -82,7 +82,7 @@ export default async function CoursesPage() {
       <CoursesDashboard courses={courses} />
 
       {/* ── CTA ── */}
-      <section className="section-y bg-white border-t border-[var(--line)]">
+      <section className="section-y bg-[#F5F5F7] border-t border-[var(--line)]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl text-center">
           <h2 className="text-2xl font-bold text-[#15151A] mb-3">
             Can&apos;t find what you&apos;re looking for?

@@ -69,7 +69,7 @@ export default function AdmissionsPage() {
   return (
     <div>
       {/* Hero */}
-      <section className="border-b border-[var(--line)] bg-[var(--surface-2)] py-12 md:py-16">
+      <section className="border-b border-[var(--line)] bg-[#F5F5F7] py-12 md:py-16">
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
           <div className="text-center">
             <span className="eyebrow mb-4 inline-flex">
@@ -108,7 +108,7 @@ export default function AdmissionsPage() {
       </section>
 
       {/* Program Categories */}
-      <section className="section-y bg-white">
+      <section className="section-y bg-[#F5F5F7]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <span className="eyebrow mb-4 inline-flex">Program Types</span>
@@ -141,7 +141,7 @@ export default function AdmissionsPage() {
       </section>
 
       {/* Partner Universities */}
-      <section className="section-y bg-[var(--surface-2)]">
+      <section className="section-y bg-[#F5F5F7]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span className="eyebrow mb-4 inline-flex">Partner Network</span>
@@ -172,7 +172,7 @@ export default function AdmissionsPage() {
       </section>
 
       {/* Admission Process */}
-      <section className="section-y bg-white">
+      <section className="section-y bg-[#F5F5F7]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
           <div className="text-center mb-14">
             <span className="eyebrow mb-4 inline-flex">Step by Step</span>
@@ -198,7 +198,7 @@ export default function AdmissionsPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-[#F5F5F7]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative overflow-hidden rounded-3xl p-10 md:p-16 text-center" style={{background: 'linear-gradient(135deg, #1a1040 0%, #0f172a 100%)'}}>
             <div className="absolute inset-0 dot-pattern opacity-15"></div>

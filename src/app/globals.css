@@ -44,7 +44,7 @@
 }
 
 :root {
-  --background: #FFFFFF;
+  --background: #F5F5F7;
   --foreground: #1D1D1F;
 }
 
@@ -764,14 +764,17 @@ button:hover .cta-arrow {
 /* Clean card — thin border, no gradient fill, gentle hover lift. */
 .card-minimal {
   background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 1rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  border: none;
+  border-radius: 1.75rem;
+  box-shadow: none;
 }
-.card-minimal:hover {
-  border-color: #DCDCE6;
-  box-shadow: 0 6px 24px rgba(20, 20, 30, 0.06);
-  transform: translateY(-2px);
+
+/* Flat card — pure white, no border, no shadow, just rounded corners. */
+.card-flat {
+  background: #fff;
+  border: none;
+  border-radius: 1.75rem;
+  box-shadow: none;
 }
 
 /* Soft accent icon tile. */

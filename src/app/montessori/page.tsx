@@ -61,7 +61,7 @@ export default function MontessoriPage() {
   return (
     <div>
       {/* Hero */}
-      <section className="border-b border-[var(--line)] bg-[var(--surface-2)] py-12 md:py-16">
+      <section className="border-b border-[var(--line)] bg-[#F5F5F7] py-12 md:py-16">
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center">
           <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#E8FAF0] text-[#059669] text-xs font-bold uppercase tracking-[0.04em] mb-4">
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -103,7 +103,7 @@ export default function MontessoriPage() {
       </section>
 
       {/* Why Montessori */}
-      <section className="section-y bg-white">
+      <section className="section-y bg-[#F5F5F7]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div>
@@ -159,7 +159,7 @@ export default function MontessoriPage() {
       </section>
 
       {/* Training Modules */}
-      <section className="section-y bg-[var(--surface-2)]">
+      <section className="section-y bg-[#F5F5F7]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
           <div className="text-center mb-12">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E8FAF0] text-[#34C759] text-sm font-semibold mb-4">Curriculum</span>
@@ -180,7 +180,7 @@ export default function MontessoriPage() {
       </section>
 
       {/* Career Prospects */}
-      <section className="section-y bg-white">
+      <section className="section-y bg-[#F5F5F7]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
           <div className="text-center mb-12">
             <span className="eyebrow mb-4 inline-flex">Career Paths</span>
@@ -201,7 +201,7 @@ export default function MontessoriPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-12 bg-white">
+      <section className="py-12 bg-[#F5F5F7]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl text-center">
           <div className="rounded-3xl p-10 relative overflow-hidden" style={{background: 'linear-gradient(135deg, #34C759 0%, #00A844 100%)'}}>
             <div className="absolute inset-0 dot-pattern opacity-20"></div>

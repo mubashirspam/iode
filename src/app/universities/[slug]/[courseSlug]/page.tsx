@@ -96,7 +96,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
       <EntityView event="view_course" entityType="course" entityId={data.id} />
 
       {/* ══════════════════════ HERO (light, minimal) ══════════════════════ */}
-      <section className="border-b border-[var(--line)] bg-[var(--surface-2)]">
+      <section className="border-b border-[var(--line)] bg-[#F5F5F7]">
         <div className="container mx-auto max-w-6xl px-4 py-8 sm:px-6 md:py-10 lg:px-8">
           {/* Breadcrumb */}
           <nav className="mb-5 flex flex-wrap items-center gap-1.5 text-sm text-[#8A8A94]">

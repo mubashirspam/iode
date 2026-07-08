@@ -21,7 +21,7 @@ export default async function CourseDetailPage(props: Props) {
 
   return (
     <div>
-      <section className="bg-gradient-to-b from-[#F0F7FF] to-white pt-12 pb-4 md:pt-20 md:pb-8">
+      <section className="bg-[#F5F5F7] pt-12 pb-4 md:pt-20 md:pb-8">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
           <Link href="/courses" className="text-[#007AFF] hover:underline flex items-center gap-2 mb-6 text-sm font-medium">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>

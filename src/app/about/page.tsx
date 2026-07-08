@@ -125,7 +125,7 @@ export default function AboutPage() {
   return (
     <div>
       {/* ══════════════════════ HERO ══════════════════════ */}
-      <section className="border-b border-[var(--line)] bg-[var(--surface-2)] py-12 md:py-16">
+      <section className="border-b border-[var(--line)] bg-[#F5F5F7] py-12 md:py-16">
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center">
           <ScrollReveal>
             <span className="eyebrow mb-4">
@@ -187,7 +187,7 @@ export default function AboutPage() {
       </section>
 
       {/* ══════════════════════ MISSION & VISION ══════════════════════ */}
-      <section className="section-y bg-white">
+      <section className="section-y bg-[#F5F5F7]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
           <ScrollReveal className="text-center mb-12">
             <span className="eyebrow mb-4 inline-flex">Our Foundation</span>
@@ -272,7 +272,7 @@ export default function AboutPage() {
       </section>
 
       {/* ══════════════════════ CORE VALUES ══════════════════════ */}
-      <section className="section-y bg-[var(--surface-2)]">
+      <section className="section-y bg-[#F5F5F7]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
           <ScrollReveal className="text-center mb-12">
             <span className="eyebrow mb-4 inline-flex">Core Values</span>
@@ -306,7 +306,7 @@ export default function AboutPage() {
       </section>
 
       {/* ══════════════════════ TIMELINE ══════════════════════ */}
-      <section className="section-y bg-white">
+      <section className="section-y bg-[#F5F5F7]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
           <ScrollReveal className="text-center mb-12">
             <span className="eyebrow mb-4 inline-flex">Our Journey</span>
@@ -360,7 +360,7 @@ export default function AboutPage() {
       </section>
 
       {/* ══════════════════════ TEAM ══════════════════════ */}
-      <section className="section-y bg-[var(--surface-2)]">
+      <section className="section-y bg-[#F5F5F7]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
           <ScrollReveal className="text-center mb-12">
             <span className="eyebrow mb-4 inline-flex">Our Teams</span>
@@ -394,7 +394,7 @@ export default function AboutPage() {
       </section>
 
       {/* ══════════════════════ CTA ══════════════════════ */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-[#F5F5F7]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
           <ScrollReveal>
             <div

@@ -170,7 +170,7 @@ export default async function Home() {
       </section>
 
       {/* ══════════════════════ MARQUEE ══════════════════════ */}
-      <section className="border-b border-[var(--line)] bg-white py-5">
+      <section className="border-b border-[var(--line)] bg-[#F5F5F7] py-5">
         <p className="mb-3 text-center text-xs font-semibold uppercase tracking-[0.12em] text-[#8A8A94]">
           Trusted partner of India&apos;s leading universities
         </p>
@@ -182,7 +182,7 @@ export default async function Home() {
               {[...trustBadges, ...trustBadges].map((name, i) => (
                 <div key={i} className="mx-8 flex shrink-0 items-center gap-2.5">
                   <div className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-                  <span className="whitespace-nowrap text-sm font-medium text-[#6E6E73]">{name}</span>
+                  <span className="whitespace-nowrap text-sm font-medium @ptext-[#6E6E73]">{name}</span>
                 </div>
               ))}
             </div>
@@ -191,7 +191,7 @@ export default async function Home() {
       </section>
 
       {/* ══════════════════════ PROGRAMS (BENTO) ══════════════════════ */}
-      <section className="section-y bg-white">
+      <section className="section-y bg-[#F5F5F7]">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <SectionHeading
@@ -210,7 +210,7 @@ export default async function Home() {
             {/* Large card — University Admissions */}
             <ScrollReveal className="md:col-span-2">
               <Link href="/admissions" className="group block h-full">
-                <div className="card-minimal flex h-full flex-col p-7 md:p-9">
+                <div className="card-flat flex h-full flex-col p-7 md:p-9">
                   <div className="flex items-center gap-3">
                     <span className="icon-tile h-12 w-12">
                       <GraduationCap className="h-6 w-6" />
@@ -219,14 +219,14 @@ export default async function Home() {
                       Most Popular
                     </span>
                   </div>
-                  <h3 className="mt-5 text-xl font-bold text-[#15151A] md:text-2xl">University Admissions</h3>
+                  <h3 className="mt-5 text-xl font-bold text-[#191919] md:text-2xl">University Admissions</h3>
                   <p className="mt-2 max-w-md text-[15px] leading-relaxed text-[#5B5B66]">
                     Expert guidance for UG, PG, MBA and Diploma programs at India&apos;s top universities — end-to-end support from selection to enrollment.
                   </p>
 
                   <div className="mt-6 grid grid-cols-2 gap-2.5">
                     {["UG Programs", "PG / MBA", "Distance Learning", "Online Degrees", "Diploma / Certificate", "Dual Degree"].map((item) => (
-                      <div key={item} className="flex items-center gap-2 text-sm text-[#15151A]">
+                      <div key={item} className="flex items-center gap-2 text-sm text-[#191919]">
                         <Check className="h-4 w-4 shrink-0 text-[var(--accent)]" />
                         <span>{item}</span>
                       </div>
@@ -244,11 +244,11 @@ export default async function Home() {
             {/* Montessori card */}
             <ScrollReveal delay={120}>
               <Link href="/montessori" className="group block h-full">
-                <div className="card-minimal flex h-full flex-col p-7">
+                <div className="card-flat flex h-full flex-col p-7">
                   <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#E8FAF0] text-[#059669]">
                     <Baby className="h-6 w-6" />
                   </span>
-                  <h3 className="mt-5 text-xl font-bold text-[#15151A]">Montessori</h3>
+                  <h3 className="mt-5 text-xl font-bold text-[#191919]">Montessori</h3>
                   <p className="mt-2 text-[15px] leading-relaxed text-[#5B5B66]">
                     Expert training and certification for aspiring Montessori educators.
                   </p>
@@ -269,7 +269,7 @@ export default async function Home() {
       </section>
 
       {/* ══════════════════════ UNIVERSITIES ══════════════════════ */}
-      <section className="section-y bg-[var(--surface-2)]">
+      <section className="section-y bg-[#F5F5F7]">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="mb-9 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <SectionHeading
@@ -289,7 +289,7 @@ export default async function Home() {
       </section>
 
       {/* ══════════════════════ STATS ══════════════════════ */}
-      <section className="border-y border-[var(--line)] bg-white py-12 md:py-14">
+      <section className="border-y border-[var(--line)] bg-[#F5F5F7] py-12 md:py-14">
         <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-5">
             <StatCounter target={5000} suffix="+" label="Happy Students" />
@@ -302,7 +302,7 @@ export default async function Home() {
       </section>
 
       {/* ══════════════════════ HOW IT WORKS ══════════════════════ */}
-      <section className="section-y bg-[var(--surface-2)]">
+      <section className="section-y bg-[#F5F5F7]">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="mb-10 text-center">
             <SectionHeading
@@ -333,7 +333,7 @@ export default async function Home() {
       </section>
 
       {/* ══════════════════════ WHY CHOOSE US ══════════════════════ */}
-      <section className="section-y bg-white">
+      <section className="section-y bg-[#F5F5F7]">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-10 lg:grid-cols-12">
             {/* Image */}
@@ -388,7 +388,7 @@ export default async function Home() {
       </section>
 
       {/* ══════════════════════ TESTIMONIALS ══════════════════════ */}
-      <section className="section-y bg-[var(--surface-2)]">
+      <section className="section-y bg-[#F5F5F7]">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal className="mb-10 text-center">
             <SectionHeading
@@ -427,7 +427,7 @@ export default async function Home() {
       </section>
 
       {/* ══════════════════════ CTA BANNER ══════════════════════ */}
-      <section className="section-y bg-white">
+      <section className="section-y bg-[#F5F5F7]">
         <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1a0a3e] via-[#241056] to-[#0f1e54] px-6 py-12 text-center md:px-12 md:py-16">

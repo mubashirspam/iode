@@ -69,7 +69,7 @@ export default function ContactPage() {
   return (
     <div>
       {/* ══════════════════════ HERO ══════════════════════ */}
-      <section className="border-b border-[var(--line)] bg-[var(--surface-2)] py-12 md:py-16">
+      <section className="border-b border-[var(--line)] bg-[#F5F5F7] py-12 md:py-16">
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center">
           <ScrollReveal>
             <span className="eyebrow mb-4 inline-flex">
@@ -102,7 +102,7 @@ export default function ContactPage() {
       </section>
 
       {/* ══════════════════════ CONTACT METHODS ══════════════════════ */}
-      <section className="py-8 bg-white border-b border-[#E5E5EA]">
+      <section className="py-8 bg-[#F5F5F7] border-b border-[#E5E5EA]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {contactMethods.map((m, i) => (
@@ -131,7 +131,7 @@ export default function ContactPage() {
       </section>
 
       {/* ══════════════════════ MAIN CONTENT ══════════════════════ */}
-      <section className="py-14 md:py-20 bg-white">
+      <section className="py-14 md:py-20 bg-[#F5F5F7]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
 
@@ -263,7 +263,7 @@ export default function ContactPage() {
       </section>
 
       {/* ══════════════════════ WHY CONTACT US ══════════════════════ */}
-      <section className="section-y bg-[var(--surface-2)]">
+      <section className="section-y bg-[#F5F5F7]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
           <ScrollReveal className="text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-bold text-[#1D1D1F]">
