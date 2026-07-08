@@ -1,13 +1,14 @@
-<<<<<<< HEAD
 import { db } from ".";
 import {
   universities,
   courses,
   courseCategories,
   courseFeeStructures,
+  courseFeeBreakdowns,
   adminUsers,
 } from "./schema";
 import { eq, sql, ilike, or, asc, desc, inArray, and, isNotNull } from "drizzle-orm";
+import type { UniversityHighlights } from "./schema";
 
 // ─── Admin Stats ────────────────────────────────────────────────────────────
 
@@ -178,83 +179,11 @@ export async function getUniversityById(id: string) {
 }
 
 export async function getUniversityBySlug(slug: string) {
-=======
-import "server-only";
-import { asc, eq } from "drizzle-orm";
-import { db } from "@/lib/db";
-import {
-  universities,
-  courses,
-  courseFeeStructures,
-  courseFeeBreakdowns,
-  type University,
-  type Course,
-  type CourseFeeStructure,
-  type CourseFeeBreakdown,
-  type UniversityHighlights,
-} from "@/lib/db/schema";
-
-export type CourseWithFee = Course & { fee: CourseFeeStructure | null };
-export type UniversityWithCourses = University & { courses: CourseWithFee[] };
-
-const num = (v: string | null | undefined) => {
-  const n = v == null ? NaN : parseFloat(v);
-  return Number.isFinite(n) ? n : null;
-};
-
-/** All active universities with their courses + fee rows (single round trips). */
-export async function getUniversitiesWithCourses(): Promise<
-  UniversityWithCourses[]
-> {
-  const [unis, allCourses, allFees] = await Promise.all([
-    db
-      .select()
-      .from(universities)
-      .where(eq(universities.isActive, true))
-      .orderBy(asc(universities.name)),
-    db.select().from(courses),
-    db.select().from(courseFeeStructures),
-  ]);
-  const feeByCourse = new Map(allFees.map((f) => [f.courseId, f]));
-  return unis.map((u) => ({
-    ...u,
-    courses: allCourses
-      .filter((c) => c.universityId === u.id)
-      .map((c) => ({ ...c, fee: feeByCourse.get(c.id) ?? null })),
-  }));
-}
-
-/** Cheapest visible starting fee across a university's courses. */
-export function uniStartingFee(u: UniversityWithCourses) {
-  let best: { amount: number; unit: string } | null = null;
-  for (const c of u.courses) {
-    if (!c.fee || c.fee.feeOnRequest) continue;
-    const amount = num(c.fee.startingFee);
-    if (amount == null) continue;
-    if (!best || amount < best.amount)
-      best = { amount, unit: c.fee.startingFeeUnit ?? "" };
-  }
-  return best;
-}
-
-export function uniDegreeKeys(u: UniversityWithCourses): string[] {
-  return [...new Set(u.courses.map((c) => c.shortName).filter(Boolean))] as string[];
-}
-
-export function uniHighlights(u: University): UniversityHighlights {
-  return (u.highlights ?? {}) as UniversityHighlights;
-}
-
-export async function getUniversityBySlug(
-  slug: string
-): Promise<UniversityWithCourses | null> {
->>>>>>> feat/university-course-experience
   const [uni] = await db
     .select()
     .from(universities)
     .where(eq(universities.slug, slug))
     .limit(1);
-<<<<<<< HEAD
 
   if (!uni) return null;
 
@@ -281,7 +210,22 @@ export async function getUniversityBySlug(
     .where(eq(courses.universityId, uni.id))
     .orderBy(asc(courses.name));
 
-  return { ...uni, courses: uniCourses };
+  // Fetch fee structures for all courses
+  const coursesWithFees = await Promise.all(
+    uniCourses.map(async (course) => {
+      const [fee] = await db
+        .select()
+        .from(courseFeeStructures)
+        .where(eq(courseFeeStructures.courseId, course.id))
+        .limit(1);
+      return {
+        ...course,
+        fee: fee ?? null,
+      };
+    })
+  );
+
+  return { ...uni, courses: coursesWithFees };
 }
 
 // ─── Courses ──────────────────────────────────────────────────────────────────
@@ -328,6 +272,7 @@ export async function getCourses(filter: CourseFilter = {}) {
       description: courses.description,
       isOnline: courses.isOnline,
       isDistance: courses.isDistance,
+      tags: courses.tags,
       universityId: courses.universityId,
       universityName: universities.name,
       universitySlug: universities.slug,
@@ -400,51 +345,11 @@ export async function getCourseBySlug(uniSlug: string, courseSlug: string) {
 
   if (!course || course.universityId !== uni.id) return null;
 
-=======
-  if (!uni || !uni.isActive) return null;
-  const uniCourses = await db
-    .select()
-    .from(courses)
-    .where(eq(courses.universityId, uni.id))
-    .orderBy(asc(courses.name));
-  const fees = await db.select().from(courseFeeStructures);
-  const feeByCourse = new Map(fees.map((f) => [f.courseId, f]));
-  return {
-    ...uni,
-    courses: uniCourses.map((c) => ({ ...c, fee: feeByCourse.get(c.id) ?? null })),
-  };
-}
-
-export type CourseDetail = {
-  course: Course;
-  university: University;
-  fee: CourseFeeStructure | null;
-  breakdowns: CourseFeeBreakdown[];
-};
-
-export async function getCourseDetail(
-  uniSlug: string,
-  courseSlug: string
-): Promise<CourseDetail | null> {
-  const [uni] = await db
-    .select()
-    .from(universities)
-    .where(eq(universities.slug, uniSlug))
-    .limit(1);
-  if (!uni || !uni.isActive) return null;
-  const rows = await db
-    .select()
-    .from(courses)
-    .where(eq(courses.slug, courseSlug));
-  const course = rows.find((c) => c.universityId === uni.id);
-  if (!course) return null;
->>>>>>> feat/university-course-experience
   const [fee] = await db
     .select()
     .from(courseFeeStructures)
     .where(eq(courseFeeStructures.courseId, course.id))
     .limit(1);
-<<<<<<< HEAD
 
   // Other courses from same university
   const sibling = await db
@@ -470,99 +375,141 @@ export async function getAdminUserByEmail(email: string) {
     .where(eq(adminUsers.email, email.toLowerCase().trim()))
     .limit(1);
   return user ?? null;
-=======
-  const breakdowns = fee
-    ? await db
-        .select()
-        .from(courseFeeBreakdowns)
-        .where(eq(courseFeeBreakdowns.feeStructureId, fee.id))
-        .orderBy(asc(courseFeeBreakdowns.sortOrder))
-    : [];
-  return { course, university: uni, fee: fee ?? null, breakdowns };
 }
 
-export type DegreeOffering = {
-  course: Course;
-  fee: CourseFeeStructure | null;
-  university: University;
-};
+// ─── Course Detail with Fee Breakdown ───────────────────────────────────────
 
-/** All courses for a degree key (courses.shortName), cheapest first. */
-export async function getCoursesByDegree(
-  degreeKey: string
-): Promise<DegreeOffering[]> {
-  const rows = await db
-    .select({
-      course: courses,
-      fee: courseFeeStructures,
-      university: universities,
-    })
+export async function getCourseDetail(uniSlug: string, courseSlug: string) {
+  const uni = await getUniversityBySlug(uniSlug);
+  if (!uni) return null;
+
+  const [course] = await db
+    .select()
     .from(courses)
-    .innerJoin(universities, eq(courses.universityId, universities.id))
-    .leftJoin(
-      courseFeeStructures,
-      eq(courseFeeStructures.courseId, courses.id)
-    )
-    .where(eq(courses.shortName, degreeKey));
-  return rows
-    .filter((r) => r.university.isActive)
-    .sort((a, b) => {
-      const av = a.fee && !a.fee.feeOnRequest ? num(a.fee.startingFee) : null;
-      const bv = b.fee && !b.fee.feeOnRequest ? num(b.fee.startingFee) : null;
-      if (av == null && bv == null) return 0;
-      if (av == null) return 1;
-      if (bv == null) return -1;
-      return av - bv;
-    });
+    .where(eq(courses.slug, courseSlug))
+    .limit(1);
+
+  if (!course || course.universityId !== uni.id) return null;
+
+  const [fee] = await db
+    .select()
+    .from(courseFeeStructures)
+    .where(eq(courseFeeStructures.courseId, course.id))
+    .limit(1);
+
+  const breakdowns = await db
+    .select()
+    .from(courseFeeBreakdowns)
+    .where(eq(courseFeeBreakdowns.feeStructureId, fee?.id ?? ""))
+    .orderBy(courseFeeBreakdowns.sortOrder);
+
+  return {
+    course,
+    university: uni,
+    fee: fee ?? null,
+    breakdowns,
+  };
 }
 
-export type DegreeGroup = {
-  key: string;
-  universityCount: number;
-  courseCount: number;
-  minStartingFee: number | null;
-};
+// ─── University Highlights Helper ─────────────────────────────────────────────
 
-/** Degree keys grouped across all universities, for /courses browsing. */
-export async function getDegreeGroups(): Promise<DegreeGroup[]> {
-  const rows = await db
-    .select({
-      shortName: courses.shortName,
-      universityId: courses.universityId,
-      startingFee: courseFeeStructures.startingFee,
-      feeOnRequest: courseFeeStructures.feeOnRequest,
-      isActive: universities.isActive,
-    })
-    .from(courses)
-    .innerJoin(universities, eq(courses.universityId, universities.id))
-    .leftJoin(
-      courseFeeStructures,
-      eq(courseFeeStructures.courseId, courses.id)
-    );
-  const groups = new Map<
-    string,
-    { unis: Set<string>; count: number; min: number | null }
-  >();
-  for (const r of rows) {
-    if (!r.shortName || !r.isActive) continue;
-    const g = groups.get(r.shortName) ?? {
-      unis: new Set<string>(),
-      count: 0,
-      min: null,
-    };
-    g.count++;
-    if (r.universityId) g.unis.add(r.universityId);
-    if (!r.feeOnRequest) {
-      const v = num(r.startingFee);
-      if (v != null && (g.min == null || v < g.min)) g.min = v;
+export function uniHighlights(university: { highlights: unknown }): UniversityHighlights {
+  return (university.highlights as UniversityHighlights) ?? {};
+}
+
+// ─── University Helper Functions ─────────────────────────────────────────────
+
+export function uniStartingFee(university: { courses: Array<{ fee?: { startingFee?: string | null; startingFeeUnit?: string | null; feeOnRequest?: boolean | null } | null }> }): { amount: number; unit: string } | null {
+  for (const course of university.courses) {
+    if (course.fee && course.fee.startingFee && !course.fee.feeOnRequest) {
+      const amount = parseFloat(course.fee.startingFee);
+      if (Number.isFinite(amount) && amount > 0) {
+        return { amount, unit: course.fee.startingFeeUnit ?? "per year" };
+      }
     }
-    groups.set(r.shortName, g);
   }
-  return [...groups.entries()].map(([key, g]) => ({
-    key,
-    universityCount: g.unis.size,
-    courseCount: g.count,
-    minStartingFee: g.min,
-  }));
->>>>>>> feat/university-course-experience
+  return null;
+}
+
+export function uniDegreeKeys(university: { courses: Array<{ courseType?: string | null }> }): string[] {
+  const degrees = new Set<string>();
+  for (const course of university.courses) {
+    if (course.courseType) {
+      degrees.add(course.courseType);
+    }
+  }
+  return Array.from(degrees);
+}
+
+// ─── Type Exports ─────────────────────────────────────────────────────────────
+
+export type UniversityWithCourses = Awaited<ReturnType<typeof getUniversityBySlug>>;
+
+// ─── Universities with Courses (for suggest page) ───────────────────────────
+
+export async function getUniversitiesWithCourses() {
+  const unis = await getUniversities();
+  const results = [];
+  for (const uni of unis) {
+    const uniWithCourses = await getUniversityBySlug(uni.slug ?? "");
+    if (uniWithCourses) {
+      // Fetch fee structures for all courses
+      const coursesWithFees = await Promise.all(
+        uniWithCourses.courses.map(async (course) => {
+          const [fee] = await db
+            .select()
+            .from(courseFeeStructures)
+            .where(eq(courseFeeStructures.courseId, course.id))
+            .limit(1);
+          return {
+            ...course,
+            fee: fee ?? null,
+            specializations: course.tags ?? [], // Use tags as specializations
+          };
+        })
+      );
+      results.push({
+        ...uniWithCourses,
+        courses: coursesWithFees,
+      });
+    }
+  }
+  return results;
+}
+
+// ─── Courses by Degree (for degree comparison page) ─────────────────────────
+
+export async function getCoursesByDegree(degreeKey: string) {
+  const courses = await getCourses({ courseType: degreeKey });
+  // Transform flat structure to nested structure expected by the page
+  const results = [];
+  for (const c of courses) {
+    const [fee] = await db
+      .select()
+      .from(courseFeeStructures)
+      .where(eq(courseFeeStructures.courseId, c.id))
+      .limit(1);
+    
+    results.push({
+      course: {
+        id: c.id,
+        name: c.name,
+        shortName: c.shortName,
+        slug: c.slug,
+        courseType: c.courseType,
+        deliveryMode: c.deliveryMode,
+        durationYears: c.durationYears,
+        specializations: c.tags ?? [], // Use tags as specializations
+      },
+      university: {
+        id: c.universityId ?? "",
+        name: c.universityName,
+        shortName: c.universityName,
+        slug: c.universitySlug,
+        highlights: null, // Will be fetched separately
+      },
+      fee: fee ?? null,
+    });
+  }
+  return results;
 }

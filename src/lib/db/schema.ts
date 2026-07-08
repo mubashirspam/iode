@@ -80,13 +80,8 @@ export const universities = pgTable(
     logoUrl: text("logo_url"),
     bannerImage: text("banner_image"),
     galleryImages: text("gallery_images").array(),
-<<<<<<< HEAD
     highlights: jsonb("highlights"), // { naac, established, approvals, students, accreditation }
     content: text("content"),        // markdown brochure body
-=======
-    highlights: jsonb("highlights").$type<UniversityHighlights>(),
-    content: text("content"), // markdown brochure body
->>>>>>> feat/university-course-experience
     website: text("website"),
     universityType: varchar("university_type", { length: 100 }),
     country: varchar("country", { length: 100 }).default("India"),
@@ -141,14 +136,8 @@ export const courses = pgTable(
     totalSemesters: integer("total_semesters"),
     eligibility: text("eligibility"),
     description: text("description"),
-<<<<<<< HEAD
     content: text("content"),         // markdown brochure body
     bannerImage: text("banner_image"),
-=======
-    content: text("content"), // markdown brochure body
-    bannerImage: text("banner_image"),
-    specializations: text("specializations").array(),
->>>>>>> feat/university-course-experience
     isOnline: boolean("is_online").default(true),
     isDistance: boolean("is_distance").default(false),
     tags: text("tags").array(),
@@ -279,57 +268,6 @@ export const courseFeeBreakdownsRelations = relations(
 );
 
 // ============================================
-// Analytics / lead capture (main-site owned)
-// ============================================
-export const visitors = pgTable("visitors", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  country: varchar("country", { length: 2 }),
-  city: varchar("city", { length: 120 }),
-  region: varchar("region", { length: 120 }),
-  device: varchar("device", { length: 20 }),
-  browser: varchar("browser", { length: 60 }),
-  os: varchar("os", { length: 60 }),
-  referrer: text("referrer"),
-  landingPath: text("landing_path"),
-  utmSource: varchar("utm_source", { length: 120 }),
-  utmMedium: varchar("utm_medium", { length: 120 }),
-  utmCampaign: varchar("utm_campaign", { length: 120 }),
-  visitCount: integer("visit_count").default(1),
-  firstSeen: timestamp("first_seen").defaultNow(),
-  lastSeen: timestamp("last_seen").defaultNow(),
-});
-
-export const pageViews = pgTable("page_views", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  visitorId: uuid("visitor_id"),
-  event: varchar("event", { length: 40 }).default("page_view"),
-  path: text("path"),
-  entityType: varchar("entity_type", { length: 20 }),
-  entityId: uuid("entity_id"),
-  referrer: text("referrer"),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
-export const leads = pgTable("leads", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  name: varchar("name", { length: 255 }),
-  phone: varchar("phone", { length: 30 }),
-  email: varchar("email", { length: 255 }),
-  message: text("message"),
-  source: varchar("source", { length: 60 }),
-  status: varchar("status", { length: 30 }).default("new"),
-  visitorId: uuid("visitor_id"),
-  universityId: uuid("university_id"),
-  courseId: uuid("course_id"),
-  utmSource: varchar("utm_source", { length: 120 }),
-  utmMedium: varchar("utm_medium", { length: 120 }),
-  utmCampaign: varchar("utm_campaign", { length: 120 }),
-  utmContent: varchar("utm_content", { length: 120 }),
-  utmTerm: varchar("utm_term", { length: 120 }),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
-// ============================================
 // Type Exports
 // ============================================
 export type AdminUser = typeof adminUsers.$inferSelect;
@@ -344,7 +282,6 @@ export type CourseFeeStructure = typeof courseFeeStructures.$inferSelect;
 export type NewCourseFeeStructure = typeof courseFeeStructures.$inferInsert;
 export type CourseFeeBreakdown = typeof courseFeeBreakdowns.$inferSelect;
 export type NewCourseFeeBreakdown = typeof courseFeeBreakdowns.$inferInsert;
-<<<<<<< HEAD
 
 // ============================================
 // Analytics / Tracking (owned by the main site)
@@ -469,9 +406,5 @@ export type Visitor = typeof visitors.$inferSelect;
 export type NewVisitor = typeof visitors.$inferInsert;
 export type PageView = typeof pageViews.$inferSelect;
 export type NewPageView = typeof pageViews.$inferInsert;
-=======
-export type Visitor = typeof visitors.$inferSelect;
-export type PageView = typeof pageViews.$inferSelect;
->>>>>>> feat/university-course-experience
 export type Lead = typeof leads.$inferSelect;
 export type NewLead = typeof leads.$inferInsert;

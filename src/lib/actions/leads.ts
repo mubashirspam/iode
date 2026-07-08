@@ -56,8 +56,6 @@ async function insertLead(input: LeadInput): Promise<LeadResult> {
     utmSource: utm.utmSource ?? null,
     utmMedium: utm.utmMedium ?? null,
     utmCampaign: utm.utmCampaign ?? null,
-    utmContent: utm.utmContent ?? null,
-    utmTerm: utm.utmTerm ?? null,
   });
   return { ok: true };
 }

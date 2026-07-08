@@ -11,7 +11,7 @@ import {
 export default function UniversityCard({
   university: u,
 }: {
-  university: UniversityWithCourses;
+  university: NonNullable<UniversityWithCourses>;
 }) {
   const h = uniHighlights(u);
   const start = uniStartingFee(u);

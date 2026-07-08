@@ -38,13 +38,10 @@
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-soft: pulseSoft 3s ease-in-out infinite;
   --animate-slide-down: slideDown 0.3s ease-out both;
-<<<<<<< HEAD
   --animate-marquee: marquee 35s linear infinite;
   --animate-gradient-shift: gradientShift 8s ease infinite;
   --animate-blob: blob 10s ease-in-out infinite;
-=======
   --animate-slide-up: slideUp 0.3s ease-out both;
->>>>>>> feat/university-course-experience
 }
 
 :root {

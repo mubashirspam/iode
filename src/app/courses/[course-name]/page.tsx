@@ -14,13 +14,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const degree = degreeBySlug(params["course-name"]);
   if (!degree) return { title: "Courses" };
   return {
-<<<<<<< HEAD
-    title: `${courseName} | Vidyavasal Courses`,
-    description: `Learn more about the ${courseName} program at Vidyavasal.`,
-=======
-    title: `Online ${degree.key} — Compare Fees Across Universities (2026)`,
-    description: `${degree.full} (${degree.duration}, ${degree.level}) — compare online/distance ${degree.key} fees across UGC-recognized universities, cheapest first. Free admission guidance.`,
->>>>>>> feat/university-course-experience
+    title: `${degree.full} | Vidyavasal Courses`,
+    description: `Learn more about the ${degree.full} program at Vidyavasal.`,
   };
 }
 
@@ -37,7 +32,6 @@ export default async function DegreeComparisonPage(props: Props) {
 
   return (
     <div>
-<<<<<<< HEAD
       <section className="bg-[#F5F5F7] pt-12 pb-4 md:pt-20 md:pb-8">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
           <Link href="/courses" className="text-[#007AFF] hover:underline flex items-center gap-2 mb-6 text-sm font-medium">
@@ -47,51 +41,10 @@ export default async function DegreeComparisonPage(props: Props) {
           <span className="inline-block px-3 py-1 bg-[#E8F2FF] text-[#007AFF] text-xs font-semibold rounded-full mb-4 uppercase tracking-wide">
             Program Details
           </span>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-[#1D1D1F]">{courseName}</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-[#1D1D1F]">{degree.full}</h1>
           <p className="text-lg text-[#6E6E73]">
-            Advance your career with our comprehensive {courseName} program designed for modern professionals.
+            Advance your career with our comprehensive {degree.full} program designed for modern professionals.
           </p>
-=======
-      {/* Hero */}
-      <section className="bg-gradient-to-b from-[#F0F7FF] to-white pt-12 pb-8 md:pt-16 md:pb-10">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <nav className="text-sm text-[#6E6E73] mb-6 flex items-center gap-2">
-            <Link href="/courses" className="hover:text-[#007AFF]">
-              Courses
-            </Link>
-            <span className="opacity-50">›</span>
-            <span className="text-[#1D1D1F] font-medium">{degree.key}</span>
-          </nav>
-          <div className="flex items-start gap-5">
-            <div className="w-16 h-16 rounded-2xl bg-[#E8F2FF] flex items-center justify-center text-3xl shrink-0">
-              {degree.icon}
-            </div>
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-[#1D1D1F] leading-tight">
-                Online {degree.key}
-              </h1>
-              <p className="text-[#6E6E73] mt-1">{degree.full}</p>
-              <div className="flex flex-wrap gap-2 mt-3">
-                <span className="px-3 py-1 bg-white border border-[#E5E5EA] text-xs font-bold rounded-full text-[#6E6E73]">
-                  ⏱️ {degree.duration}
-                </span>
-                <span className="px-3 py-1 bg-white border border-[#E5E5EA] text-xs font-bold rounded-full text-[#6E6E73]">
-                  🎓 {degree.level}
-                </span>
-                {cheapest && (
-                  <span className="px-3 py-1 bg-[#E8F9EF] text-[#0d9455] text-xs font-bold rounded-full">
-                    from {inr(cheapest.fee!.startingFee!)}{" "}
-                    {cheapest.fee!.startingFeeUnit}
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="mt-5 bg-[#F5F9FF] border border-[#DBE8FF] rounded-xl px-4 py-3 text-sm text-[#1D1D1F]">
-            <span className="font-semibold">Eligibility:</span>{" "}
-            {degree.eligibility}
-          </div>
->>>>>>> feat/university-course-experience
         </div>
       </section>
 
@@ -125,7 +78,7 @@ export default async function DegreeComparisonPage(props: Props) {
                       className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-xs shrink-0"
                       style={{ background: color }}
                     >
-                      {(university.shortName ?? university.name).slice(0, 5)}
+                      {(university.shortName ?? university.name ?? "Uni").slice(0, 5)}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
