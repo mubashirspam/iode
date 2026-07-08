@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+<<<<<<< HEAD
     remotePatterns: [
       {
         protocol: "https",
@@ -14,6 +15,10 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
+=======
+    // University logos/banners are uploaded via the admin panel to ImageKit.
+    remotePatterns: [{ protocol: "https", hostname: "ik.imagekit.io" }],
+>>>>>>> feat/university-course-experience
   },
 };
 

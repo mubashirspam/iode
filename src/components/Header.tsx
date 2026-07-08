@@ -112,6 +112,7 @@ export default function Header() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
               </svg>
             </span>
+<<<<<<< HEAD
             <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-60 bg-white rounded-2xl shadow-xl shadow-black/8 border border-[#E5E5EA] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 flex flex-col overflow-hidden p-1.5">
               {[
                 {
@@ -174,6 +175,21 @@ export default function Header() {
                 : 'hover:text-[#1D1D1F] after:w-0 after:bg-[#4F46E5] hover:after:w-full'
             }`}
           >
+=======
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 bg-white rounded-2xl shadow-xl shadow-black/8 border border-[#E5E5EA] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 flex flex-col overflow-hidden p-1.5">
+              <Link href="/universities" className="px-4 py-2.5 rounded-xl hover:bg-[#F5F5F7] transition-colors text-[#1D1D1F] text-sm">Online Degrees</Link>
+              <Link href="/iits" className="px-4 py-2.5 rounded-xl hover:bg-[#F5F5F7] transition-colors text-[#1D1D1F] text-sm">IITS Distance</Link>
+              <Link href="/eduthalim" className="px-4 py-2.5 rounded-xl hover:bg-[#F5F5F7] transition-colors text-[#1D1D1F] text-sm">Eduthalim Degree</Link>
+              <Link href="/montessori" className="px-4 py-2.5 rounded-xl hover:bg-[#F5F5F7] transition-colors text-[#1D1D1F] text-sm">Montessori</Link>
+              <div className="h-px bg-[#E5E5EA] my-1 mx-2"></div>
+              <Link href="/courses" className="px-4 py-2.5 rounded-xl hover:bg-[#E8F2FF] transition-colors text-[#007AFF] text-sm font-semibold">All Courses →</Link>
+            </div>
+          </div>
+          <Link href="/universities" className="relative py-1 hover:text-[#1D1D1F] transition-colors duration-200 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#007AFF] after:rounded-full hover:after:w-full after:transition-all after:duration-300">
+            Universities
+          </Link>
+          <Link href="/blog" className="relative py-1 hover:text-[#1D1D1F] transition-colors duration-200 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#007AFF] after:rounded-full hover:after:w-full after:transition-all after:duration-300">
+>>>>>>> feat/university-course-experience
             Blog
           </Link>
         </nav>
@@ -265,6 +281,7 @@ export default function Header() {
               Browse All Courses →
             </Link>
 
+<<<<<<< HEAD
             <Link
               href="/blog"
               onClick={() => setMobileMenuOpen(false)}
@@ -274,6 +291,26 @@ export default function Header() {
                   : 'hover:bg-[#F5F5F7] text-[#1D1D1F]'
               }`}
             >
+=======
+            <div className="px-4 py-2 text-xs font-semibold text-[#AEAEB2] uppercase tracking-wider">Programs</div>
+            <Link href="/universities" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 pl-6 rounded-xl hover:bg-[#F5F5F7] transition-colors text-[#6E6E73]">
+              Online Degrees (Universities)
+            </Link>
+            <Link href="/iits" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 pl-6 rounded-xl hover:bg-[#F5F5F7] transition-colors text-[#6E6E73]">
+              IITS Distance
+            </Link>
+            <Link href="/eduthalim" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 pl-6 rounded-xl hover:bg-[#F5F5F7] transition-colors text-[#6E6E73]">
+              Eduthalim Degree
+            </Link>
+            <Link href="/montessori" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 pl-6 rounded-xl hover:bg-[#F5F5F7] transition-colors text-[#6E6E73]">
+              Montessori
+            </Link>
+            <Link href="/courses" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 pl-6 rounded-xl hover:bg-[#E8F2FF] transition-colors text-[#007AFF] font-semibold">
+              All Courses →
+            </Link>
+
+            <Link href="/blog" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-xl hover:bg-[#F5F5F7] transition-colors text-[#1D1D1F] font-medium">
+>>>>>>> feat/university-course-experience
               Blog
             </Link>
 
